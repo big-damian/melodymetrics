@@ -39,4 +39,3 @@ class MainWindow:
     def run(self):
         # Start the main event loop
         self.root.mainloop()
-
