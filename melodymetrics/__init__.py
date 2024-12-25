@@ -2,6 +2,6 @@
 
 __author__ = "Damian Peña"
 __email__ = "damian@email.com"
-__version__ = "0.0.0"
+__version__ = "__version__ = "0.1.0""
 
 PACKAGE_NAME = "melodymetrics"
