@@ -1,6 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
 
+import pandas as pd
+
+
 class MainWindow:
 
     def __init__(self, title="MelodyMetrics by Damián Peña", width=400, height=300):
@@ -37,30 +40,33 @@ class MainWindow:
         frame.pack(expand=True, fill="both")
 
         # Create Treeview
-        tree = ttk.Treeview(frame, columns=list(df.columns), show="headings")
-        tree.grid(row=0, column=0, sticky="nsew")
+        if isinstance(self.df, pd.DataFrame):
+            tree = ttk.Treeview(frame, columns=list(self.df.columns), show="headings")
+            tree.grid(row=0, column=0, sticky="nsew")
 
-        # Add Scrollbars
-        scroll_y = ttk.Scrollbar(frame, orient="vertical", command=tree.yview)
-        scroll_x = ttk.Scrollbar(frame, orient="horizontal", command=tree.xview)
-        tree.configure(yscrollcommand=scroll_y.set, xscrollcommand=scroll_x.set)
+            # Add Scrollbars
+            scroll_y = ttk.Scrollbar(frame, orient="vertical", command=tree.yview)
+            scroll_x = ttk.Scrollbar(frame, orient="horizontal", command=tree.xview)
+            tree.configure(yscrollcommand=scroll_y.set, xscrollcommand=scroll_x.set)
 
-        # Grid Layout for Scrollbars
-        scroll_y.grid(row=0, column=1, sticky="ns")
-        scroll_x.grid(row=1, column=0, sticky="ew")
+            # Grid Layout for Scrollbars
+            scroll_y.grid(row=0, column=1, sticky="ns")
+            scroll_x.grid(row=1, column=0, sticky="ew")
 
-        # Configure the frame grid weights
-        frame.grid_rowconfigure(0, weight=1)
-        frame.grid_columnconfigure(0, weight=1)
+            # Configure the frame grid weights
+            frame.grid_rowconfigure(0, weight=1)
+            frame.grid_columnconfigure(0, weight=1)
 
-        # Add Column Headings
-        for col in df.columns:
-            tree.heading(col, text=col)
-            tree.column(col, width=100, anchor="center")
+            # Add Column Headings
+            for col in df.columns:
+                tree.heading(col, text=col)
+                tree.column(col, width=100, anchor="center")
 
-        # Add Rows
-        for _, row in df.iterrows():
-            tree.insert("", "end", values=list(row))
+            # Add Rows
+            for _, row in df.iterrows():
+                tree.insert("", "end", values=list(row))
+        else:
+            print("Couldn't create the table view because df is None")
 
     def load_dataframe(self, df):
         self.df = df
