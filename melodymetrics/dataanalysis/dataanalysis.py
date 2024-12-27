@@ -23,7 +23,7 @@ class DataAnalysis:
         Finds the dataset CSV file in the project directory or its subdirectories.
         :return: The path to the first CSV file, or None if no CSV file is found.
         """
-        project_directory = os.path.dirname(os.path.dirname(os.getcwd()))
+        project_directory = os.path.dirname(os.getcwd())
 
         # Cycle through the different directories and files
         for root, _, files in os.walk(project_directory):
@@ -35,7 +35,7 @@ class DataAnalysis:
                     self.csv_path = os.path.join(root, file)
                     print(f"Found dataset csv at {self.csv_path}")
                     return self.csv_path
-        print("No csv file found in dataset folder")
+        print("No csv file found in project folder")
         return None
 
     def load_csv_dataset(self, print_preview=False):

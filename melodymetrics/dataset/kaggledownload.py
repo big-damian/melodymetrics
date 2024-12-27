@@ -32,13 +32,21 @@ class KaggleDownload:
             dataset_download_path = kagglehub.dataset_download('paradisejoy/top-hits-spotify-from-20002019', path='songs_normalize.csv', )
             #print("Download complete!")
 
+            # Delete any existing dataset files
+            if os.path.exists(file_path):
+                os.remove(file_path)
+            if os.path.exists(new_dataset_filename):
+                os.remove(new_dataset_filename)
+
             # Move the dataset file
+            # TODO: Fix this location "dataset_ddownload_path"
             shutil.move(dataset_download_path, os.getcwd())
 
-            # Rename the dataset file
+            # Rename the dataset file TODO: Delete this text "and delete any remains"
             os.rename(file_path, new_dataset_filename)
-
-            print(f"Dataset downloaded to: {os.getcwd()}\\{new_dataset_filename}")
 
         except Exception as e:
             print(f"Error downloading dataset: {e}")
+
+        else:
+            print(f"Dataset downloaded to: {os.getcwd()}\\{new_dataset_filename}")

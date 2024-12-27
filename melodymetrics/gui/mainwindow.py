@@ -52,7 +52,7 @@ class MainWindow:
         # Add table view for dataset
         # Create Frame for Treeview and Scrollbars
         self.frame = tk.Frame(self.root)
-        self.frame.pack(expand=True, fill="both")
+        self.frame.pack(expand=True, fill="both", padx=10, pady=10)
 
         # Create Treeview
         tree = ttk.Treeview(self.frame, columns=list(self.df.columns), show="headings")
@@ -81,7 +81,7 @@ class MainWindow:
             tree.insert("", "end", values=list(row))
 
         # Add console view
-        self.console_output.pack(padx=10, pady=10)
+        self.console_output.pack(expand=True, fill="both", padx=10, pady=10)
 
     def load_dataframe(self, df):
         self.df = df
