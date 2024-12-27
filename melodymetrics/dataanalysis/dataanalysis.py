@@ -6,7 +6,8 @@ class DataAnalysis:
     def __init__(self, load_dataset=True, print_preview=False):
         """
         Initialize the DataAnalysis class with the file name.
-        :load_dataset (bool): If True, the app will load the first csv found in the dataset package.
+        :load_dataset (bool): If True, the app will load the dataset csv file.
+        :print_preview (bool): If True and load_dataset True, the first five rows of the dataset will be printed.
         """
         self.csv_path = None
         self.df = None
@@ -37,9 +38,10 @@ class DataAnalysis:
         print("No csv file found in dataset folder")
         return None
 
-    def load_csv_dataset(self):
+    def load_csv_dataset(self, print_preview=False):
         """
-        Loads the CSV file and renames the specified columns.
+        Loads the dataset CSV file to the df variable.
+        :return: The first 5 rows of the dataset or an error message if no CSV file is found.
         """
         try:
             # Construct the file path
@@ -49,10 +51,11 @@ class DataAnalysis:
             self.df = pd.read_csv(file_path)
 
             # Return the first few rows for verification
+            print(self.df.head())
             return self.df.head()
         except Exception as e:
             print(f"An error occurred: {e}")
+            return f"An error occurred: {e}"
 
 # Example usage:
 da = DataAnalysis()
-# print(processor.load_and_process_csv())

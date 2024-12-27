@@ -4,6 +4,9 @@ from tkinter import ttk
 
 import pandas as pd
 
+from melodymetrics.dataanalysis.dataanalysis import DataAnalysis
+from melodymetrics.dataset.kaggledownload import KaggleDownload
+
 
 class MainWindow:
 
@@ -21,7 +24,7 @@ class MainWindow:
         self.style.map('TButton', background=[('active', '#45A049')])
 
         # Other attributes
-        self.df = None
+        self.df = pd.DataFrame({"No dataframe loaded.": ["No dataframe loaded."]})
 
         # Add widgets
         self.create_widgets()
@@ -34,33 +37,30 @@ class MainWindow:
         # Create a Text widget for console output
         self.console_output = tk.Text(self.root, wrap="word", height=20, width=60)
 
-
         # Redirect stdout to the Text widget
         sys.stdout = RedirectOutput(self.console_output)
 
         # Add buttons
-        self.button1 = ttk.Button(self.root, text="Button 1", style="TButton", command=self.button1_action)
-        self.button1.pack(pady=10)
+        self.button_download_dataframe = ttk.Button(self.root, text="Download Kaggle dataframe", style="TButton", command=self.button_download_dataframe_action)
+        self.button_download_dataframe.pack(pady=10)
+        self.button_load_dataframe = ttk.Button(self.root, text="Load dataframe", style="TButton", command=self.button_load_dataframe_action)
+        self.button_load_dataframe.pack(pady=10)
 
         self.button2 = ttk.Button(self.root, text="Button 2", style="TButton", command=self.button2_action)
         self.button2.pack(pady=10)
 
+        # Add table view for dataset
         # Create Frame for Treeview and Scrollbars
-        frame = tk.Frame(self.root)
-        frame.pack(expand=True, fill="both")
+        self.frame = tk.Frame(self.root)
+        self.frame.pack(expand=True, fill="both")
 
         # Create Treeview
-        # If error with dataframe, use an "empty" dataframe
-        if not isinstance(self.df, pd.DataFrame):
-            self.df = pd.DataFrame({"Error with dataframe": ["Error with dataframe"]})
-            print(f"Error: Dataframe has not been loaded properly.")
-
-        tree = ttk.Treeview(frame, columns=list(self.df.columns), show="headings")
+        tree = ttk.Treeview(self.frame, columns=list(self.df.columns), show="headings")
         tree.grid(row=0, column=0, sticky="nsew")
 
         # Add Scrollbars
-        scroll_y = ttk.Scrollbar(frame, orient="vertical", command=tree.yview)
-        scroll_x = ttk.Scrollbar(frame, orient="horizontal", command=tree.xview)
+        scroll_y = ttk.Scrollbar(self.frame, orient="vertical", command=tree.yview)
+        scroll_x = ttk.Scrollbar(self.frame, orient="horizontal", command=tree.xview)
         tree.configure(yscrollcommand=scroll_y.set, xscrollcommand=scroll_x.set)
 
         # Grid Layout for Scrollbars
@@ -68,8 +68,8 @@ class MainWindow:
         scroll_x.grid(row=1, column=0, sticky="ew")
 
         # Configure the frame grid weights
-        frame.grid_rowconfigure(0, weight=1)
-        frame.grid_columnconfigure(0, weight=1)
+        self.frame.grid_rowconfigure(0, weight=1)
+        self.frame.grid_columnconfigure(0, weight=1)
 
         # Add Column Headings
         for col in self.df.columns:
@@ -80,14 +80,30 @@ class MainWindow:
         for _, row in self.df.iterrows():
             tree.insert("", "end", values=list(row))
 
+        # Add console view
         self.console_output.pack(padx=10, pady=10)
 
     def load_dataframe(self, df):
         self.df = df
 
-    def button1_action(self):
-        self.label.config(text="Button 1 Clicked!")
-        print("Button 1")
+    def button_download_dataframe_action(self):
+        self.label.config(text="Downloading dataframe from kaggle.com...")
+        print("Downloading dataframe from kaggle.com...")
+
+        kd = KaggleDownload()
+        kd.dataset_download()
+
+
+        self.label.config(text="Welcome to MelodyMetrics!")
+
+    def button_load_dataframe_action(self):
+        self.label.config(text="Loading dataset...")
+        da = DataAnalysis(load_dataset=True)
+        self.df = da.df.sort_values(by="popularity", ascending=False)
+
+        self.update_dataframe_view()
+
+        self.label.config(text="Welcome to MelodyMetrics!")
 
     def button2_action(self):
         self.label.config(text="Button 2 Clicked!")
@@ -95,6 +111,33 @@ class MainWindow:
     def run(self):
         # Start the main event loop
         self.root.mainloop()
+
+    def update_dataframe_view(self):
+        # Create Treeview
+        tree = ttk.Treeview(self.frame, columns=list(self.df.columns), show="headings")
+        tree.grid(row=0, column=0, sticky="nsew")
+
+        # Add Scrollbars
+        scroll_y = ttk.Scrollbar(self.frame, orient="vertical", command=tree.yview)
+        scroll_x = ttk.Scrollbar(self.frame, orient="horizontal", command=tree.xview)
+        tree.configure(yscrollcommand=scroll_y.set, xscrollcommand=scroll_x.set)
+
+        # Grid Layout for Scrollbars
+        scroll_y.grid(row=0, column=1, sticky="ns")
+        scroll_x.grid(row=1, column=0, sticky="ew")
+
+        # Configure the frame grid weights
+        self.frame.grid_rowconfigure(0, weight=1)
+        self.frame.grid_columnconfigure(0, weight=1)
+
+        # Add Column Headings
+        for col in self.df.columns:
+            tree.heading(col, text=col)
+            tree.column(col, width=100, anchor="center")
+
+        # Add Rows
+        for _, row in self.df.iterrows():
+            tree.insert("", "end", values=list(row))
 
 
 class RedirectOutput:
@@ -105,7 +148,7 @@ class RedirectOutput:
         self.text_widget = text_widget
 
     def write(self, text):
-        self.text_widget.insert(tk.END, text)
+        self.text_widget.insert(tk.END, f"{text}\n")
         self.text_widget.see(tk.END)  # Automatically scroll to the end
 
         # Output to the original console
