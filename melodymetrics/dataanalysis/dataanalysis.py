@@ -10,13 +10,18 @@ class DataAnalysis:
         :print_preview (bool): If True and load_dataset True, the first five rows of the dataset will be printed.
         """
         self.csv_path = None
-        self.df = None
+        self._df = None
 
         if load_dataset:
             if print_preview:
                 print(self.load_csv_dataset())
             else:
                 self.load_csv_dataset()
+
+    @property
+    def df(self):
+        """Getter method for the dataframe (df)."""
+        return self._df
 
     def find_dataset_csv(self):
         """
@@ -48,10 +53,12 @@ class DataAnalysis:
             file_path = self.find_dataset_csv()
 
             # Read the CSV file
-            self.df = pd.read_csv(file_path)
+            self._df = pd.read_csv(file_path)
 
             # Return the first few rows for verification
-            print(self.df.head())
+            if print_preview:
+                print(self.df.head())
+
             return self.df.head()
         except Exception as e:
             print(f"An error occurred: {e}")

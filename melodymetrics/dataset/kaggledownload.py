@@ -39,7 +39,7 @@ class KaggleDownload:
                 os.remove(new_dataset_filename)
 
             # Move the dataset file
-            # TODO: Fix this location "dataset_ddownload_path"
+            # TODO: Fix this location "dataset_download_path"
             shutil.move(dataset_download_path, os.getcwd())
 
             # Rename the dataset file TODO: Delete this text "and delete any remains"
