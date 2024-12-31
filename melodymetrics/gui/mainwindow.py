@@ -30,58 +30,56 @@ class MainWindow:
         self.create_widgets()
 
     def create_widgets(self):
-        # Add a label
-        self.label = ttk.Label(self.root, text="Welcome to the Simple Window", font=("Arial", 14))
-        self.label.pack(pady=20)
+        # Label
+        self.label = ttk.Label(self.root, text="Welcome to MelodyMetrics!", font=("Arial", 14))
+        self.label.grid(row=0, column=0, columnspan=3, pady=10)
 
-        # Create a Text widget for console output
-        self.console_output = tk.Text(self.root, wrap="word", height=20, width=60)
+        # Buttons
+        self.button_download_dataframe = ttk.Button(
+            self.root, text="Download Kaggle dataframe", style="TButton", command=self.button_download_dataframe_action
+        )
+        self.button_load_dataframe = ttk.Button(
+            self.root, text="Load dataframe", style="TButton", command=self.button_load_dataframe_action
+        )
+        self.button2 = ttk.Button(self.root, text="Button test 2", style="TButton", command=self.button2_action)
 
-        # Redirect stdout to the Text widget
-        sys.stdout = RedirectOutput(self.console_output)
+        self.button_download_dataframe.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
+        self.button_load_dataframe.grid(row=1, column=1, padx=10, pady=5, sticky="ew")
+        self.button2.grid(row=1, column=2, padx=10, pady=5, sticky="ew")
 
-        # Add buttons
-        self.button_download_dataframe = ttk.Button(self.root, text="Download Kaggle dataframe", style="TButton", command=self.button_download_dataframe_action)
-        self.button_download_dataframe.pack(pady=10)
-        self.button_load_dataframe = ttk.Button(self.root, text="Load dataframe", style="TButton", command=self.button_load_dataframe_action)
-        self.button_load_dataframe.pack(pady=10)
+        # Dataset frame
+        self.frame = ttk.Frame(self.root)
+        self.frame.grid(row=2, column=0, columnspan=3, padx=10, pady=10, sticky="nsew")
 
-        self.button2 = ttk.Button(self.root, text="Button 2", style="TButton", command=self.button2_action)
-        self.button2.pack(pady=10)
+        # Treeview for the dataframe
+        self.tree = ttk.Treeview(self.frame, columns=list(self.df.columns), show="headings")
+        self.tree.grid(row=0, column=0, sticky="nsew")
 
-        # Add table view for dataset
-        # Create Frame for Treeview and Scrollbars
-        self.frame = tk.Frame(self.root)
-        self.frame.pack(expand=True, fill="both", padx=10, pady=10)
+        # Scrollbars for Treeview
+        scroll_y = ttk.Scrollbar(self.frame, orient="vertical", command=self.tree.yview)
+        scroll_x = ttk.Scrollbar(self.frame, orient="horizontal", command=self.tree.xview)
+        self.tree.configure(yscrollcommand=scroll_y.set, xscrollcommand=scroll_x.set)
 
-        # Create Treeview
-        tree = ttk.Treeview(self.frame, columns=list(self.df.columns), show="headings")
-        tree.grid(row=0, column=0, sticky="nsew")
-
-        # Add Scrollbars
-        scroll_y = ttk.Scrollbar(self.frame, orient="vertical", command=tree.yview)
-        scroll_x = ttk.Scrollbar(self.frame, orient="horizontal", command=tree.xview)
-        tree.configure(yscrollcommand=scroll_y.set, xscrollcommand=scroll_x.set)
-
-        # Grid Layout for Scrollbars
         scroll_y.grid(row=0, column=1, sticky="ns")
         scroll_x.grid(row=1, column=0, sticky="ew")
 
-        # Configure the frame grid weights
+        # Configure frame resizing behavior
         self.frame.grid_rowconfigure(0, weight=1)
         self.frame.grid_columnconfigure(0, weight=1)
 
-        # Add Column Headings
-        for col in self.df.columns:
-            tree.heading(col, text=col)
-            tree.column(col, width=100, anchor="center")
+        # Populate treeview with placeholder data
+        self.update_dataframe_view()
 
-        # Add Rows
-        for _, row in self.df.iterrows():
-            tree.insert("", "end", values=list(row))
+        # Console output
+        self.console_output = tk.Text(self.root, wrap="word", height=10)
+        self.console_output.grid(row=3, column=0, columnspan=3, padx=10, pady=10, sticky="nsew")
 
-        # Add console view
-        self.console_output.pack(expand=True, fill="both", padx=10, pady=10)
+        # Redirect stdout to the console output
+        sys.stdout = RedirectOutput(self.console_output)
+
+        # Configure root resizing behavior
+        self.root.grid_rowconfigure(2, weight=1)
+        self.root.grid_columnconfigure(0, weight=1)
 
     def load_dataframe(self, df):
         self.df = df
