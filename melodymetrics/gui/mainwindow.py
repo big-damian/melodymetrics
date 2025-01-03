@@ -32,7 +32,7 @@ class MainWindow:
     def create_widgets(self):
         # Label
         self.label = ttk.Label(self.root, text="Welcome to MelodyMetrics!", font=("Arial", 14))
-        self.label.grid(row=0, column=0, columnspan=3, pady=10)
+        self.label.grid(row=0, column=0, columnspan=4, pady=10)
 
         # Buttons
         self.button_download_dataframe = ttk.Button(
@@ -41,15 +41,19 @@ class MainWindow:
         self.button_load_dataframe = ttk.Button(
             self.root, text="Load dataframe", style="TButton", command=self.button_load_dataframe_action
         )
-        self.button2 = ttk.Button(self.root, text="Button test 2", style="TButton", command=self.button2_action)
+        self.button_check_any_null = ttk.Button(self.root, text="Check nulls in columns", style="TButton", command=self.button_check_any_null_action)
+        self.button_check_num_unique_values = ttk.Button(self.root, text="Check number of unique values", style="TButton", command=self.button_check_num_unique_values)
+        self.button_add_time_ago_column = ttk.Button(self.root, text="Add time ago column", style="TButton", command=self.button_add_time_ago_column)
 
         self.button_download_dataframe.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
         self.button_load_dataframe.grid(row=1, column=1, padx=10, pady=5, sticky="ew")
-        self.button2.grid(row=1, column=2, padx=10, pady=5, sticky="ew")
+        self.button_check_any_null.grid(row=1, column=2, padx=10, pady=5, sticky="ew")
+        self.button_check_num_unique_values.grid(row=1, column=3, padx=10, pady=5, sticky="ew")
+        self.button_add_time_ago_column.grid(row=2, column=3, padx=10, pady=5, sticky="ew")
 
         # Dataset frame
         self.frame = ttk.Frame(self.root)
-        self.frame.grid(row=2, column=0, columnspan=3, padx=10, pady=10, sticky="nsew")
+        self.frame.grid(row=3, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
 
         # Treeview for the dataframe
         self.tree = ttk.Treeview(self.frame, columns=list(self.df.columns), show="headings")
@@ -72,7 +76,7 @@ class MainWindow:
 
         # Console output
         self.console_output = tk.Text(self.root, wrap="word", height=10)
-        self.console_output.grid(row=3, column=0, columnspan=3, padx=10, pady=10, sticky="nsew")
+        self.console_output.grid(row=4, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
 
         # Redirect stdout to the console output
         sys.stdout = RedirectOutput(self.console_output)
@@ -81,8 +85,9 @@ class MainWindow:
         self.root.grid_rowconfigure(2, weight=1)
         self.root.grid_columnconfigure(0, weight=1)
 
-    def load_dataframe(self, df):
-        self.df = df
+    def load_dataframe_from_analysis(self):
+        da = DataAnalysis()
+        self.df = da.df
 
     def button_download_dataframe_action(self):
         self.label.config(text="Downloading dataframe from kaggle.com...")
@@ -91,28 +96,58 @@ class MainWindow:
         kd = KaggleDownload()
         kd.dataset_download()
 
-
-        self.label.config(text="Welcome to MelodyMetrics!")
-
     def button_load_dataframe_action(self):
         self.label.config(text="Loading dataset...")
+        print("Loading dataset...")
+
         da = DataAnalysis(load_dataset=True)
         self.df = da.df.sort_values(by="popularity", ascending=False)
 
         self.update_dataframe_view()
+        print("Finished loading dataset into dataframe.")
 
-        self.label.config(text="Welcome to MelodyMetrics!")
+    def button_check_any_null_action(self):
+        da = DataAnalysis()
+        new_df = da.check_any_null_values()
 
-    def button2_action(self):
-        self.label.config(text="Button 2 Clicked!")
+        self.update_dataframe_view(new_df)
+
+        self.label.config(text=f"Total null values in dataframe is {da.check_num_null_values()}")
+        print("Checked for nulls in dataframe")
+        print(f"Total null values in dataframe is {da.check_num_null_values()}")
+
+    def button_check_num_unique_values(self):
+        da = DataAnalysis()
+
+        # Update dataframe view with unique values dataframe
+        self.update_dataframe_view(da.check_num_unique_values())
+
+        self.label.config(text="Printed number of unique values in dataframe")
+        print("Printed number of unique values in dataframe")
+
+    def button_add_time_ago_column(self):
+        da = DataAnalysis()
+        da.add_time_ago_column()
+
+        self.load_dataframe_from_analysis()
+        self.update_dataframe_view()
+
+        self.label.config(text=f"Added new column 'time ago'")
+        print(f"Added new column 'time ago'")
 
     def run(self):
         # Start the main event loop
         self.root.mainloop()
 
-    def update_dataframe_view(self):
+    def update_dataframe_view(self, df=None):
+
+        if df is None:
+            df = self.df
+        else:
+            df = df
+
         # Create Treeview
-        tree = ttk.Treeview(self.frame, columns=list(self.df.columns), show="headings")
+        tree = ttk.Treeview(self.frame, columns=list(df.columns), show="headings")
         tree.grid(row=0, column=0, sticky="nsew")
 
         # Add Scrollbars
@@ -129,12 +164,12 @@ class MainWindow:
         self.frame.grid_columnconfigure(0, weight=1)
 
         # Add Column Headings
-        for col in self.df.columns:
+        for col in df.columns:
             tree.heading(col, text=col)
             tree.column(col, width=100, anchor="center")
 
         # Add Rows
-        for _, row in self.df.iterrows():
+        for _, row in df.iterrows():
             tree.insert("", "end", values=list(row))
 
 

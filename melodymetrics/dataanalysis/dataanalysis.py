@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import datetime as dt
 
 class DataAnalysis:
 
@@ -63,6 +64,55 @@ class DataAnalysis:
         except Exception as e:
             print(f"An error occurred: {e}")
             return f"An error occurred: {e}"
+
+    def check_num_null_values(self):
+        num_null_values = self._df.isnull().values.sum()
+        print(f"Total null values in dataframe: {num_null_values}")
+        return num_null_values
+
+    def check_any_null_values(self, return_df=False):
+        any_null_values_df = self._df.isnull().any().to_frame(name="Any null values in dataframe columns?").reset_index()
+        any_null_values_df.rename(columns={"index": "Column name"}, inplace=True)
+
+        print(any_null_values_df)
+        return any_null_values_df
+
+    def check_num_unique_values(self):
+        unique_counts = []
+
+        for column in self.df.columns:
+            # Calculate the number of unique values in the column
+            unique_count = len(self.df[column].unique())
+            # Create a tuple with the column name and the number of unique values
+            column_info = (column, unique_count)
+            # Add the tuple to the list
+            unique_counts.append(column_info)
+
+        # Convert the list of tuples into a DataFrame
+        unique_values_df = pd.DataFrame(unique_counts, columns=['Column name', 'Unique Values'])
+
+        print(unique_values_df)
+        return unique_values_df
+
+    def drop_duplicates(self):
+        pass
+
+    def add_time_ago_column(self):
+        def get_years_ago(row):
+            # Get the current year
+            current_year = dt.datetime.now().year
+
+            # Calculate the difference using the row's year value
+            time_ago = current_year - row["year"]
+            return time_ago
+
+        # Apply the function to calculate years ago for each row
+        self._df["years_ago"] = self._df.apply(get_years_ago, axis=1)
+        print()
+
+    def find_dataset_duration(self):
+        pass
+
 
 # Example usage:
 da = DataAnalysis()
