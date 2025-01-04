@@ -4,6 +4,7 @@ from tkinter import ttk
 
 import pandas as pd
 
+from melodymetrics.custom_exceptions import DatasetNotLoadedException
 from melodymetrics.dataanalysis.dataanalysis import DataAnalysis
 from melodymetrics.dataset.kaggledownload import KaggleDownload
 
@@ -25,7 +26,7 @@ class MainWindow:
 
         # Other attributes
         self.da = None
-        self.df = pd.DataFrame({"No dataframe loaded.": ["No dataframe loaded."]})
+        self.df = pd.DataFrame({"No dataframe loaded.": ["No dataframe loaded."]}) # TODO: Maybe its possible to stop using this variable and use always the df from the da class
 
         # Add widgets
         self.create_widgets()
@@ -47,12 +48,12 @@ class MainWindow:
         self.button_load_dataframe.grid(row=1, column=1, padx=10, pady=5, sticky="ew")
         self.button_check_any_null.grid(row=1, column=2, padx=10, pady=5, sticky="ew")
         self.button_check_num_unique_values.grid(row=1, column=3, padx=10, pady=5, sticky="ew")
-        self.button_add_time_ago_column.grid(row=2, column=2, padx=10, pady=5, sticky="ew")
-        self.button_separate_main_genre.grid(row=2, column=3, padx=10, pady=5, sticky="ew")
+        self.button_add_time_ago_column.grid(row=2, column=0, padx=10, pady=5, sticky="ew")
+        self.button_separate_main_genre.grid(row=3, column=0, padx=10, pady=5, sticky="ew")
 
         # Dataset frame
         self.frame = ttk.Frame(self.root)
-        self.frame.grid(row=3, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
+        self.frame.grid(row=6, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
 
         # Treeview for the dataframe
         self.tree = ttk.Treeview(self.frame, columns=list(self.df.columns), show="headings")
@@ -75,7 +76,8 @@ class MainWindow:
 
         # Console output
         self.console_output = tk.Text(self.root, wrap="word", height=10)
-        self.console_output.grid(row=4, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
+        self.console_output.bind("<Key>", "break") # Disable writing in the text field
+        self.console_output.grid(row=7, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
 
         # Redirect stdout to the console output
         sys.stdout = RedirectOutput(self.console_output)
@@ -89,8 +91,7 @@ class MainWindow:
 
     def check_if_dataframe_loaded(self):
         if self.da is None:
-            print("Error: No dataset loaded yet. Please load the dataset first")
-            raise DatasetNotLoadedException("No dataset loaded yet. Please load the dataset first")
+            raise DatasetNotLoadedException
 
     def button_download_dataframe_action(self):
         self.label.config(text="Downloading dataframe from kaggle.com...")
@@ -202,7 +203,3 @@ class RedirectOutput:
 
     def flush(self):
         pass  # Needed for compatibility with Python's standard stream handling
-
-# Custom exceptions
-class DatasetNotLoadedException(Exception):
-    pass

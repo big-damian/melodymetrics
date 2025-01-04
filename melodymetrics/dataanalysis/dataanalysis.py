@@ -2,6 +2,9 @@ import os
 import pandas as pd
 import datetime as dt
 
+from melodymetrics.custom_exceptions import DatasetNotLoadedException
+
+
 class DataAnalysis:
 
     def __init__(self, load_dataset=True, print_preview=False):
@@ -23,6 +26,9 @@ class DataAnalysis:
     def df(self):
         """Getter method for the dataframe (df)."""
         return self._df
+
+    def __str__(self):
+        return self._df.head().to_string()
 
     def find_dataset_csv(self):
         """
@@ -65,12 +71,19 @@ class DataAnalysis:
             print(f"An error occurred: {e}")
             return f"An error occurred: {e}"
 
+    def check_if_dataframe_loaded(self):
+        if self._df is None:
+            print("Error: No dataset loaded yet. Please load the dataset first")
+            raise DatasetNotLoadedException
+
     def check_num_null_values(self):
+        self.check_if_dataframe_loaded()
         num_null_values = self._df.isnull().values.sum()
         print(f"Total null values in dataframe: {num_null_values}")
         return num_null_values
 
     def check_any_null_values(self, return_df=False):
+        self.check_if_dataframe_loaded()
         any_null_values_df = self._df.isnull().any().to_frame(name="Any null values in dataframe columns?").reset_index()
         any_null_values_df.rename(columns={"index": "Column name"}, inplace=True)
 
@@ -78,6 +91,7 @@ class DataAnalysis:
         return any_null_values_df
 
     def check_num_unique_values(self):
+        self.check_if_dataframe_loaded()
         unique_counts = []
 
         for column in self.df.columns:
@@ -89,15 +103,17 @@ class DataAnalysis:
             unique_counts.append(column_info)
 
         # Convert the list of tuples into a DataFrame
-        unique_values_df = pd.DataFrame(unique_counts, columns=['Column name', 'Unique Values'])
+        unique_values_df = pd.DataFrame(unique_counts, columns=['Column name', 'Unique values'])
 
         print(unique_values_df)
         return unique_values_df
 
     def drop_duplicates(self):
+        self.check_if_dataframe_loaded()
         pass
 
     def add_time_ago_column(self):
+        self.check_if_dataframe_loaded()
         def get_years_ago(row):
             # Get the current year
             current_year = dt.datetime.now().year
@@ -111,6 +127,8 @@ class DataAnalysis:
         print(self._df)
 
     def separate_genres(self):
+        # TODO: Found bug, if trying to use this method more than once, all subgenres become None
+        self.check_if_dataframe_loaded()
         def split_genre(row):
             parts = row.split(sep=", ", maxsplit=1)  # Split by ", "
             # Handle cases where there might not be a subgenre
@@ -123,8 +141,20 @@ class DataAnalysis:
         print(self._df)
 
     def find_dataset_duration(self):
+        self.check_if_dataframe_loaded()
         pass
 
 
+
 # Example usage:
-da = DataAnalysis()
+# da = DataAnalysis(load_dataset=False)
+# da.find_dataset_csv()
+# da.load_csv_dataset()
+# da.check_num_null_values()
+# da.check_any_null_values()
+# da.check_num_unique_values()
+# da.separate_genres()
+# da.add_time_ago_column()
+# da.find_dataset_duration()
+# da.drop_duplicates()
+# print(da)
