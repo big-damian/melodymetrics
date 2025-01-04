@@ -24,6 +24,7 @@ class MainWindow:
         self.style.map('TButton', background=[('active', '#45A049')])
 
         # Other attributes
+        self.da = None
         self.df = pd.DataFrame({"No dataframe loaded.": ["No dataframe loaded."]})
 
         # Add widgets
@@ -35,21 +36,19 @@ class MainWindow:
         self.label.grid(row=0, column=0, columnspan=4, pady=10)
 
         # Buttons
-        self.button_download_dataframe = ttk.Button(
-            self.root, text="Download Kaggle dataframe", style="TButton", command=self.button_download_dataframe_action
-        )
-        self.button_load_dataframe = ttk.Button(
-            self.root, text="Load dataframe", style="TButton", command=self.button_load_dataframe_action
-        )
+        self.button_download_dataframe = ttk.Button(self.root, text="Download Kaggle dataframe", style="TButton", command=self.button_download_dataframe_action)
+        self.button_load_dataframe = ttk.Button(self.root, text="Load dataframe", style="TButton", command=self.button_load_dataframe_action)
         self.button_check_any_null = ttk.Button(self.root, text="Check nulls in columns", style="TButton", command=self.button_check_any_null_action)
-        self.button_check_num_unique_values = ttk.Button(self.root, text="Check number of unique values", style="TButton", command=self.button_check_num_unique_values)
-        self.button_add_time_ago_column = ttk.Button(self.root, text="Add time ago column", style="TButton", command=self.button_add_time_ago_column)
+        self.button_check_num_unique_values = ttk.Button(self.root, text="Check number of unique values", style="TButton", command=self.button_check_num_unique_values_action)
+        self.button_add_time_ago_column = ttk.Button(self.root, text="Add time ago column", style="TButton", command=self.button_add_time_ago_column_action)
+        self.button_separate_main_genre = ttk.Button(self.root, text="Separate genres", style="TButton", command=self.button_separate_main_genre_action)
 
         self.button_download_dataframe.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
         self.button_load_dataframe.grid(row=1, column=1, padx=10, pady=5, sticky="ew")
         self.button_check_any_null.grid(row=1, column=2, padx=10, pady=5, sticky="ew")
         self.button_check_num_unique_values.grid(row=1, column=3, padx=10, pady=5, sticky="ew")
-        self.button_add_time_ago_column.grid(row=2, column=3, padx=10, pady=5, sticky="ew")
+        self.button_add_time_ago_column.grid(row=2, column=2, padx=10, pady=5, sticky="ew")
+        self.button_separate_main_genre.grid(row=2, column=3, padx=10, pady=5, sticky="ew")
 
         # Dataset frame
         self.frame = ttk.Frame(self.root)
@@ -86,8 +85,12 @@ class MainWindow:
         self.root.grid_columnconfigure(0, weight=1)
 
     def load_dataframe_from_analysis(self):
-        da = DataAnalysis()
-        self.df = da.df
+        self.df = self.da.df
+
+    def check_if_dataframe_loaded(self):
+        if self.da is None:
+            print("Error: No dataset loaded yet. Please load the dataset first")
+            raise DatasetNotLoadedException("No dataset loaded yet. Please load the dataset first")
 
     def button_download_dataframe_action(self):
         self.label.config(text="Downloading dataframe from kaggle.com...")
@@ -100,40 +103,50 @@ class MainWindow:
         self.label.config(text="Loading dataset...")
         print("Loading dataset...")
 
-        da = DataAnalysis(load_dataset=True)
-        self.df = da.df.sort_values(by="popularity", ascending=False)
+        self.da = DataAnalysis(load_dataset=True)
+        self.load_dataframe_from_analysis()
+        self.df = self.df.sort_values(by="popularity", ascending=False)
 
         self.update_dataframe_view()
-        print("Finished loading dataset into dataframe.")
+        print("Finished loading dataset into dataframe (sorted by most popular).")
 
     def button_check_any_null_action(self):
-        da = DataAnalysis()
-        new_df = da.check_any_null_values()
+        self.check_if_dataframe_loaded()
+        new_df = self.da.check_any_null_values()
 
         self.update_dataframe_view(new_df)
 
-        self.label.config(text=f"Total null values in dataframe is {da.check_num_null_values()}")
+        self.label.config(text=f"Total null values in dataframe is {self.da.check_num_null_values()}")
         print("Checked for nulls in dataframe")
-        print(f"Total null values in dataframe is {da.check_num_null_values()}")
+        print(f"Total null values in dataframe is {self.da.check_num_null_values()}")
 
-    def button_check_num_unique_values(self):
-        da = DataAnalysis()
-
+    def button_check_num_unique_values_action(self):
+        self.check_if_dataframe_loaded()
         # Update dataframe view with unique values dataframe
-        self.update_dataframe_view(da.check_num_unique_values())
+        self.update_dataframe_view(self.da.check_num_unique_values())
 
         self.label.config(text="Printed number of unique values in dataframe")
         print("Printed number of unique values in dataframe")
 
-    def button_add_time_ago_column(self):
-        da = DataAnalysis()
-        da.add_time_ago_column()
+    def button_add_time_ago_column_action(self):
+        self.check_if_dataframe_loaded()
+        self.da.add_time_ago_column()
 
         self.load_dataframe_from_analysis()
         self.update_dataframe_view()
 
-        self.label.config(text=f"Added new column 'time ago'")
-        print(f"Added new column 'time ago'")
+        self.label.config(text="Added new column 'time ago'")
+        print("Added new column 'time ago'")
+
+    def button_separate_main_genre_action(self):
+        self.check_if_dataframe_loaded()
+        self.da.separate_genres()
+
+        self.load_dataframe_from_analysis()
+        self.update_dataframe_view()
+
+        self.label.config(text="Separated genres into main genre and subgenre")
+        print("Separated genres into main genre and subgenre")
 
     def run(self):
         # Start the main event loop
@@ -189,3 +202,7 @@ class RedirectOutput:
 
     def flush(self):
         pass  # Needed for compatibility with Python's standard stream handling
+
+# Custom exceptions
+class DatasetNotLoadedException(Exception):
+    pass

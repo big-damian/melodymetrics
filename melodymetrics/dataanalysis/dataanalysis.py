@@ -108,7 +108,19 @@ class DataAnalysis:
 
         # Apply the function to calculate years ago for each row
         self._df["years_ago"] = self._df.apply(get_years_ago, axis=1)
-        print()
+        print(self._df)
+
+    def separate_genres(self):
+        def split_genre(row):
+            parts = row.split(sep=", ", maxsplit=1)  # Split by ", "
+            # Handle cases where there might not be a subgenre
+            if len(parts) >= 2:
+                return parts[0], parts[1]  # Main genre and subgenre
+            else:
+                return parts[0], None  # Only main genre
+
+        self.df[["genre", "subgenres"]] = self.df["genre"].apply(split_genre).apply(pd.Series)
+        print(self._df)
 
     def find_dataset_duration(self):
         pass
