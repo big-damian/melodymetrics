@@ -11,7 +11,7 @@ from melodymetrics.dataset.kaggledownload import KaggleDownload
 
 class MainWindow:
 
-    def __init__(self, title="MelodyMetrics by Damián Peña", width=800, height=600):
+    def __init__(self, title="MelodyMetrics by Damián Peña", width=900, height=700):
         # Initialize the main window
         self.root = tk.Tk()
         self.root.title(title)
@@ -39,17 +39,37 @@ class MainWindow:
         # Buttons
         self.button_download_dataframe = ttk.Button(self.root, text="Download Kaggle dataframe", style="TButton", command=self.button_download_dataframe_action)
         self.button_load_dataframe = ttk.Button(self.root, text="Load dataframe", style="TButton", command=self.button_load_dataframe_action)
+        self.button_describe_columns = ttk.Button(self.root, text="Describe dataframe columns", style="TButton", command=self.button_describe_columns_action)
+        self.button_show_dataframe_statistics = ttk.Button(self.root, text="Show dataframe statistics", style="TButton", command=self.button_show_dataframe_statistics_action)
+        self.button_find_dataset_duration = ttk.Button(self.root, text="Show dataframe duration", style="TButton", command=self.button_find_dataset_duration_action)
         self.button_check_any_null = ttk.Button(self.root, text="Check nulls in columns", style="TButton", command=self.button_check_any_null_action)
         self.button_check_num_unique_values = ttk.Button(self.root, text="Check number of unique values", style="TButton", command=self.button_check_num_unique_values_action)
-        self.button_add_time_ago_column = ttk.Button(self.root, text="Add time ago column", style="TButton", command=self.button_add_time_ago_column_action)
         self.button_separate_main_genre = ttk.Button(self.root, text="Separate genres", style="TButton", command=self.button_separate_main_genre_action)
+        self.button_add_years_ago_column = ttk.Button(self.root, text="Add years ago column", style="TButton", command=self.button_add_years_ago_column_action)
 
-        self.button_download_dataframe.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
-        self.button_load_dataframe.grid(row=1, column=1, padx=10, pady=5, sticky="ew")
-        self.button_check_any_null.grid(row=1, column=2, padx=10, pady=5, sticky="ew")
-        self.button_check_num_unique_values.grid(row=1, column=3, padx=10, pady=5, sticky="ew")
-        self.button_add_time_ago_column.grid(row=2, column=0, padx=10, pady=5, sticky="ew")
-        self.button_separate_main_genre.grid(row=3, column=0, padx=10, pady=5, sticky="ew")
+        self.button_download_dataframe.grid         (row=1, column=0, padx=10, pady=5, sticky="ew")
+        self.button_load_dataframe.grid             (row=1, column=1, padx=10, pady=5, sticky="ew")
+        self.button_describe_columns.grid           (row=1, column=2, padx=10, pady=5, sticky="ew")
+        self.button_show_dataframe_statistics.grid  (row=1, column=3, padx=10, pady=5, sticky="ew")
+        self.button_find_dataset_duration.grid      (row=2, column=0, padx=10, pady=5, sticky="ew")
+        self.button_check_any_null.grid             (row=3, column=0, padx=10, pady=5, sticky="ew")
+        self.button_check_num_unique_values.grid    (row=3, column=1, padx=10, pady=5, sticky="ew")
+        self.button_separate_main_genre.grid        (row=3, column=2, padx=10, pady=5, sticky="ew")
+        self.button_add_years_ago_column.grid        (row=3, column=3, padx=10, pady=5, sticky="ew")
+
+        # Adding weight to rows and columns
+        self.root.grid_rowconfigure(0, weight=1)
+        self.root.grid_rowconfigure(1, weight=1)
+        self.root.grid_rowconfigure(2, weight=1)
+        self.root.grid_rowconfigure(3, weight=1)
+        self.root.grid_rowconfigure(4, weight=1)
+        self.root.grid_rowconfigure(5, weight=1)
+        self.root.grid_rowconfigure(6, weight=1)
+        self.root.grid_rowconfigure(7, weight=1)
+        self.root.grid_columnconfigure(0, weight=1)
+        self.root.grid_columnconfigure(1, weight=1)
+        self.root.grid_columnconfigure(2, weight=1)
+        self.root.grid_columnconfigure(3, weight=1)
 
         # Dataset frame
         self.frame = ttk.Frame(self.root)
@@ -111,11 +131,38 @@ class MainWindow:
         self.update_dataframe_view()
         print("Finished loading dataset into dataframe (sorted by most popular).")
 
+    def button_describe_columns_action(self):
+        self.check_if_dataframe_loaded()
+        aux_df = self.da.explain_dataframe_columns()
+
+        self.update_dataframe_view(aux_df)
+
+        self.label.config(text="Showing dataframe columns explanation")
+        print("Showing dataframe columns explanation")
+
+    def button_show_dataframe_statistics_action(self):
+        self.check_if_dataframe_loaded()
+        aux_df = self.da.summarize_dataframe_statistics()
+
+        self.update_dataframe_view(aux_df)
+
+        self.label.config(text="Showing dataframe summarized dataframe statistics")
+        print("Showing dataframe summarized dataframe statistics")
+    
+    def button_find_dataset_duration_action(self):
+        self.check_if_dataframe_loaded()
+        aux_df = self.da.find_dataset_duration()
+
+        self.update_dataframe_view(aux_df)
+
+        self.label.config(text="Showing dataframe duration")
+        print("Showing dataframe duration")
+
     def button_check_any_null_action(self):
         self.check_if_dataframe_loaded()
-        new_df = self.da.check_any_null_values()
+        aux_df = self.da.check_any_null_values()
 
-        self.update_dataframe_view(new_df)
+        self.update_dataframe_view(aux_df)
 
         self.label.config(text=f"Total null values in dataframe is {self.da.check_num_null_values()}")
         print("Checked for nulls in dataframe")
@@ -129,15 +176,15 @@ class MainWindow:
         self.label.config(text="Printed number of unique values in dataframe")
         print("Printed number of unique values in dataframe")
 
-    def button_add_time_ago_column_action(self):
+    def button_add_years_ago_column_action(self):
         self.check_if_dataframe_loaded()
-        self.da.add_time_ago_column()
+        self.da.add_years_ago_column()
 
         self.load_dataframe_from_analysis()
         self.update_dataframe_view()
 
-        self.label.config(text="Added new column 'time ago'")
-        print("Added new column 'time ago'")
+        self.label.config(text="Added new column 'years ago'")
+        print("Added new column 'years ago'")
 
     def button_separate_main_genre_action(self):
         self.check_if_dataframe_loaded()
@@ -148,6 +195,8 @@ class MainWindow:
 
         self.label.config(text="Separated genres into main genre and subgenre")
         print("Separated genres into main genre and subgenre")
+
+        self.button_separate_main_genre.config(state="disabled")
 
     def run(self):
         # Start the main event loop

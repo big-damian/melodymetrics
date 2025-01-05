@@ -28,6 +28,7 @@ class DataAnalysis:
         return self._df
 
     def __str__(self):
+        self.check_if_dataframe_loaded()
         return self._df.head().to_string()
 
     def find_dataset_csv(self):
@@ -76,6 +77,64 @@ class DataAnalysis:
             print("Error: No dataset loaded yet. Please load the dataset first")
             raise DatasetNotLoadedException
 
+    @staticmethod
+    def explain_dataframe_columns():
+        """
+           Generate and display a hardcoded DataFrame describing/explaining the columns of the DataFrame that will be analyzed.
+
+           Returns:
+               pandas.DataFrame: A DataFrame containing the attribute names and their explanations.
+           """
+        explanatory_dataframe = pd.DataFrame({
+            "Attribute": [
+                "artist",
+                "song",
+                "duration_ms",
+                "explicit",
+                "year",
+                "popularity",
+                "danceability",
+                "energy",
+                "key",
+                "loudness",
+                "mode",
+                "speechiness",
+                "acousticness",
+                "instrumentalness",
+                "liveness",
+                "valence",
+                "tempo",
+                "genre"
+            ],
+            "Description": [
+                "Name of the Artist.",
+                "Name of the Track.",
+                "Duration of the track in milliseconds.",
+                "Indicates if content is offensive or unsuitable for children.",
+                "Release Year of the track.",
+                "Popularity of the track (higher value = more popular).",
+                "Describes how suitable a track is for dancing (0.0 to 1.0).",
+                "A measure of intensity and activity (0.0 to 1.0).",
+                "The key the track is in, mapped using Pitch Class notation.",
+                "The overall loudness of a track in decibels (dB).",
+                "Modality of a track: major (1) or minor (0).",
+                "Detects the presence of spoken words in a track.",
+                "Confidence measure of whether a track is acoustic (0.0 to 1.0).",
+                "Predicts if a track contains no vocals (closer to 1.0 = instrumental).",
+                "Detects the presence of an audience in the recording.",
+                "Describes the musical positiveness of a track (0.0 to 1.0).",
+                "The estimated tempo of a track in beats per minute (BPM).",
+                "Genre of the track."]})
+        print(f"Dataframe columns explanation:\n{explanatory_dataframe.to_string()}")
+        return explanatory_dataframe
+
+    def summarize_dataframe_statistics(self):
+        self.check_if_dataframe_loaded()
+
+        # Prints summary statistics for all columns (numerical and categorical), transposes the DataFrame, and resets the index to display the statistics as columns.
+        print(self._df.describe(include="all").T.reset_index())
+        return self._df.describe(include="all").T.reset_index()
+
     def check_num_null_values(self):
         self.check_if_dataframe_loaded()
         num_null_values = self._df.isnull().values.sum()
@@ -112,7 +171,7 @@ class DataAnalysis:
         self.check_if_dataframe_loaded()
         pass
 
-    def add_time_ago_column(self):
+    def add_years_ago_column(self):
         self.check_if_dataframe_loaded()
         def get_years_ago(row):
             # Get the current year
@@ -142,14 +201,31 @@ class DataAnalysis:
 
     def find_dataset_duration(self):
         self.check_if_dataframe_loaded()
+
+        # Extract the start and end dates
+        start_date = self._df['year'].min()
+        end_date = self._df['year'].max()
+
+        # Calculate the duration
+        duration = end_date - start_date
+
+        # Print the results
+        print(f"Start Year: {start_date} \nEnd Year: {end_date} \nDuration: {duration} years")
+        return pd.DataFrame({
+        "Dataframe duration": [
+            f"Start Year: {start_date}",
+            f"End Year: {end_date}",
+            "-o-",
+            f"Duration: {duration} years"
+        ]})
+
+    def clean_dataset(self):
         pass
 
-
-
 # Example usage:
-# da = DataAnalysis(load_dataset=False)
-# da.find_dataset_csv()
-# da.load_csv_dataset()
+da = DataAnalysis(load_dataset=False)
+da.find_dataset_csv()
+da.load_csv_dataset()
 # da.check_num_null_values()
 # da.check_any_null_values()
 # da.check_num_unique_values()
@@ -157,4 +233,5 @@ class DataAnalysis:
 # da.add_time_ago_column()
 # da.find_dataset_duration()
 # da.drop_duplicates()
-# print(da)
+print(da)
+da.find_dataset_duration()
