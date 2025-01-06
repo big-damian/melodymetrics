@@ -3,7 +3,7 @@ import os
 
 import pandas as pd
 
-from melodymetrics.custom_exceptions import DatasetNotLoadedException
+from melodymetrics.exceptions import DatasetNotLoadedException
 
 
 class DataAnalysis:

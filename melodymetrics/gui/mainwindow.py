@@ -4,7 +4,7 @@ from tkinter import ttk
 
 import pandas as pd
 
-from melodymetrics.custom_exceptions import DatasetNotLoadedException
+from melodymetrics.exceptions import DatasetNotLoadedException
 from melodymetrics.dataanalysis.dataanalysis import DataAnalysis
 from melodymetrics.dataset.kaggledownload import KaggleDownload
 
