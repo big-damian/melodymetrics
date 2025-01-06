@@ -7,6 +7,7 @@ import pandas as pd
 from melodymetrics.dataanalysis.data_analysis import DataAnalysis
 from melodymetrics.dataset.kaggle_download import KaggleDownload
 from melodymetrics.exceptions import DatasetNotLoadedException
+from melodymetrics.gui.plot_window import PlotWindow
 
 
 class MainWindow:
@@ -57,6 +58,8 @@ class MainWindow:
                                                      command=self.button_separate_main_genre_action)
         self.button_add_years_ago_column = ttk.Button(self.root, text="Add years ago column", style="TButton",
                                                       command=self.button_add_years_ago_column_action)
+        self.button_open_plot_window = ttk.Button(self.root, text="Open plot visualization window", style="TButton",
+                                                  command=self.button_open_plot_window_action)
 
         self.button_download_dataframe.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
         self.button_load_dataframe.grid(row=1, column=1, padx=10, pady=5, sticky="ew")
@@ -67,6 +70,7 @@ class MainWindow:
         self.button_check_num_unique_values.grid(row=3, column=1, padx=10, pady=5, sticky="ew")
         self.button_separate_main_genre.grid(row=3, column=2, padx=10, pady=5, sticky="ew")
         self.button_add_years_ago_column.grid(row=3, column=3, padx=10, pady=5, sticky="ew")
+        self.button_open_plot_window.grid(row=4, column=1, columnspan=2, padx=10, pady=5, sticky="ew")
 
         # Adding weight to rows and columns
         self.root.grid_rowconfigure(0, weight=1)
@@ -116,6 +120,9 @@ class MainWindow:
         # Configure root resizing behavior
         self.root.grid_rowconfigure(2, weight=1)
         self.root.grid_columnconfigure(0, weight=1)
+
+        # Ensure the process terminates when the window is closed
+        self.root.protocol("WM_DELETE_WINDOW", self.root.quit())
 
     def load_dataframe_from_analysis(self):
         self.df = self.da.df
@@ -187,16 +194,6 @@ class MainWindow:
         self.label.config(text="Printed number of unique values in dataframe")
         print("Printed number of unique values in dataframe")
 
-    def button_add_years_ago_column_action(self):
-        self.check_if_dataframe_loaded()
-        self.da.add_years_ago_column()
-
-        self.load_dataframe_from_analysis()
-        self.update_dataframe_view()
-
-        self.label.config(text="Added new column 'years ago'")
-        print("Added new column 'years ago'")
-
     def button_separate_main_genre_action(self):
         self.check_if_dataframe_loaded()
         self.da.separate_genres()
@@ -208,6 +205,21 @@ class MainWindow:
         print("Separated genres into main genre and subgenre")
 
         self.button_separate_main_genre.config(state="disabled")
+
+    def button_add_years_ago_column_action(self):
+        self.check_if_dataframe_loaded()
+        self.da.add_years_ago_column()
+
+        self.load_dataframe_from_analysis()
+        self.update_dataframe_view()
+
+        self.label.config(text="Added new column 'years ago'")
+        print("Added new column 'years ago'")
+
+    def button_open_plot_window_action(self):
+        # Open the plot window
+        plot_window = PlotWindow(self.root)
+        plot_window.create_widgets()
 
     def run(self):
         # Start the main event loop
