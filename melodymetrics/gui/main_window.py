@@ -4,9 +4,9 @@ from tkinter import ttk
 
 import pandas as pd
 
-from melodymetrics.exceptions import DatasetNotLoadedException
 from melodymetrics.dataanalysis.data_analysis import DataAnalysis
 from melodymetrics.dataset.kaggle_download import KaggleDownload
+from melodymetrics.exceptions import DatasetNotLoadedException
 
 
 class MainWindow:
@@ -16,7 +16,7 @@ class MainWindow:
         self.root = tk.Tk()
         self.root.title(title)
         self.root.geometry(f"{width}x{height}")
-        #self.root.configure(bg="#F5F5F5")  # Set a background color
+        # self.root.configure(bg="#F5F5F5")  # Set a background color
 
         # Define a style for ttk widgets
         self.style = ttk.Style()
@@ -26,7 +26,8 @@ class MainWindow:
 
         # Other attributes
         self.da = None
-        self.df = pd.DataFrame({"No dataframe loaded.": ["No dataframe loaded."]}) # TODO: Maybe its possible to stop using this variable and use always the df from the da class
+        self.df = pd.DataFrame({"No dataframe loaded.": [
+            "No dataframe loaded."]})  # TODO: Maybe its possible to stop using this variable and use always the df from the da class
 
         # Add widgets
         self.create_widgets()
@@ -37,25 +38,35 @@ class MainWindow:
         self.label.grid(row=0, column=0, columnspan=4, pady=10)
 
         # Buttons
-        self.button_download_dataframe = ttk.Button(self.root, text="Download Kaggle dataframe", style="TButton", command=self.button_download_dataframe_action)
-        self.button_load_dataframe = ttk.Button(self.root, text="Load dataframe", style="TButton", command=self.button_load_dataframe_action)
-        self.button_describe_columns = ttk.Button(self.root, text="Describe dataframe columns", style="TButton", command=self.button_describe_columns_action)
-        self.button_show_dataframe_statistics = ttk.Button(self.root, text="Show dataframe statistics", style="TButton", command=self.button_show_dataframe_statistics_action)
-        self.button_find_dataset_duration = ttk.Button(self.root, text="Show dataframe duration", style="TButton", command=self.button_find_dataset_duration_action)
-        self.button_check_any_null = ttk.Button(self.root, text="Check nulls in columns", style="TButton", command=self.button_check_any_null_action)
-        self.button_check_num_unique_values = ttk.Button(self.root, text="Check number of unique values", style="TButton", command=self.button_check_num_unique_values_action)
-        self.button_separate_main_genre = ttk.Button(self.root, text="Separate genres", style="TButton", command=self.button_separate_main_genre_action)
-        self.button_add_years_ago_column = ttk.Button(self.root, text="Add years ago column", style="TButton", command=self.button_add_years_ago_column_action)
+        self.button_download_dataframe = ttk.Button(self.root, text="Download Kaggle dataframe", style="TButton",
+                                                    command=self.button_download_dataframe_action)
+        self.button_load_dataframe = ttk.Button(self.root, text="Load dataframe", style="TButton",
+                                                command=self.button_load_dataframe_action)
+        self.button_describe_columns = ttk.Button(self.root, text="Describe dataframe columns", style="TButton",
+                                                  command=self.button_describe_columns_action)
+        self.button_show_dataframe_statistics = ttk.Button(self.root, text="Show dataframe statistics", style="TButton",
+                                                           command=self.button_show_dataframe_statistics_action)
+        self.button_find_dataset_duration = ttk.Button(self.root, text="Show dataframe duration", style="TButton",
+                                                       command=self.button_find_dataset_duration_action)
+        self.button_check_any_null = ttk.Button(self.root, text="Check nulls in columns", style="TButton",
+                                                command=self.button_check_any_null_action)
+        self.button_check_num_unique_values = ttk.Button(self.root, text="Check number of unique values",
+                                                         style="TButton",
+                                                         command=self.button_check_num_unique_values_action)
+        self.button_separate_main_genre = ttk.Button(self.root, text="Separate genres", style="TButton",
+                                                     command=self.button_separate_main_genre_action)
+        self.button_add_years_ago_column = ttk.Button(self.root, text="Add years ago column", style="TButton",
+                                                      command=self.button_add_years_ago_column_action)
 
-        self.button_download_dataframe.grid         (row=1, column=0, padx=10, pady=5, sticky="ew")
-        self.button_load_dataframe.grid             (row=1, column=1, padx=10, pady=5, sticky="ew")
-        self.button_describe_columns.grid           (row=1, column=2, padx=10, pady=5, sticky="ew")
-        self.button_show_dataframe_statistics.grid  (row=1, column=3, padx=10, pady=5, sticky="ew")
-        self.button_find_dataset_duration.grid      (row=2, column=0, padx=10, pady=5, sticky="ew")
-        self.button_check_any_null.grid             (row=3, column=0, padx=10, pady=5, sticky="ew")
-        self.button_check_num_unique_values.grid    (row=3, column=1, padx=10, pady=5, sticky="ew")
-        self.button_separate_main_genre.grid        (row=3, column=2, padx=10, pady=5, sticky="ew")
-        self.button_add_years_ago_column.grid        (row=3, column=3, padx=10, pady=5, sticky="ew")
+        self.button_download_dataframe.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
+        self.button_load_dataframe.grid(row=1, column=1, padx=10, pady=5, sticky="ew")
+        self.button_describe_columns.grid(row=1, column=2, padx=10, pady=5, sticky="ew")
+        self.button_show_dataframe_statistics.grid(row=1, column=3, padx=10, pady=5, sticky="ew")
+        self.button_find_dataset_duration.grid(row=2, column=0, padx=10, pady=5, sticky="ew")
+        self.button_check_any_null.grid(row=3, column=0, padx=10, pady=5, sticky="ew")
+        self.button_check_num_unique_values.grid(row=3, column=1, padx=10, pady=5, sticky="ew")
+        self.button_separate_main_genre.grid(row=3, column=2, padx=10, pady=5, sticky="ew")
+        self.button_add_years_ago_column.grid(row=3, column=3, padx=10, pady=5, sticky="ew")
 
         # Adding weight to rows and columns
         self.root.grid_rowconfigure(0, weight=1)
@@ -96,7 +107,7 @@ class MainWindow:
 
         # Console output
         self.console_output = tk.Text(self.root, wrap="word", height=10)
-        self.console_output.bind("<Key>", "break") # Disable writing in the text field
+        self.console_output.bind("<Key>", "break")  # Disable writing in the text field
         self.console_output.grid(row=7, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
 
         # Redirect stdout to the console output
@@ -148,7 +159,7 @@ class MainWindow:
 
         self.label.config(text="Showing dataframe summarized dataframe statistics")
         print("Showing dataframe summarized dataframe statistics")
-    
+
     def button_find_dataset_duration_action(self):
         self.check_if_dataframe_loaded()
         aux_df = self.da.find_dataset_duration()
@@ -240,6 +251,7 @@ class RedirectOutput:
     """
     Redirects stdout and stderr to a Tkinter Text widget.
     """
+
     def __init__(self, text_widget):
         self.text_widget = text_widget
 

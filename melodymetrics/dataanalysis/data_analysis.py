@@ -144,7 +144,8 @@ class DataAnalysis:
 
     def check_any_null_values(self, return_df=False):
         self.check_if_dataframe_loaded()
-        any_null_values_df = self._df.isnull().any().to_frame(name="Any null values in dataframe columns?").reset_index()
+        any_null_values_df = self._df.isnull().any().to_frame(
+            name="Any null values in dataframe columns?").reset_index()
         any_null_values_df.rename(columns={"index": "Column name"}, inplace=True)
 
         print(any_null_values_df)
@@ -174,6 +175,7 @@ class DataAnalysis:
 
     def add_years_ago_column(self):
         self.check_if_dataframe_loaded()
+
         def get_years_ago(row):
             # Get the current year
             current_year = dt.datetime.now().year
@@ -189,6 +191,7 @@ class DataAnalysis:
     def separate_genres(self):
         # TODO: Found bug, if trying to use this method more than once, all subgenres become None
         self.check_if_dataframe_loaded()
+
         def split_genre(row):
             parts = row.split(sep=", ", maxsplit=1)  # Split by ", "
             # Handle cases where there might not be a subgenre
@@ -213,15 +216,16 @@ class DataAnalysis:
         # Print the results
         print(f"Start Year: {start_date} \nEnd Year: {end_date} \nDuration: {duration} years")
         return pd.DataFrame({
-        "Dataframe duration": [
-            f"Start Year: {start_date}",
-            f"End Year: {end_date}",
-            "-o-",
-            f"Duration: {duration} years"
-        ]})
+            "Dataframe duration": [
+                f"Start Year: {start_date}",
+                f"End Year: {end_date}",
+                "-o-",
+                f"Duration: {duration} years"
+            ]})
 
     def clean_dataset(self):
         pass
+
 
 # Example usage:
 da = DataAnalysis(load_dataset=False)

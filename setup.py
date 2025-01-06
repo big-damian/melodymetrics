@@ -32,14 +32,11 @@ def parse_dependencies(requirements_file):
 with open('VERSION.txt') as version_file:
     version = version_file.read().strip()
 
-
 with open("requirements.txt") as _file:
     requirements = parse_dependencies(_file)
 
-
 with open("requirements_dev.txt") as _file:
     requirements_dev = parse_dependencies(_file)
-
 
 setup(
     author=__author__,
@@ -51,7 +48,6 @@ setup(
     setup_requires=requirements_dev,
     packages=find_packages(include=[PACKAGE_NAME, f"{PACKAGE_NAME}.*"])
 )
-
 
 # remove temporary files generates in wheel file build
 shutil.rmtree(os.path.join(dir_path, "build"))

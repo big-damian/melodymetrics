@@ -5,6 +5,7 @@ class DatasetNotLoadedException(Exception):
     Attributes:
         message (str): A descriptive message indicating the cause of the error.
     """
+
     def __init__(self, message="default"):
         if message == "default":
             message = "No dataset loaded yet. Please load the dataset first"
