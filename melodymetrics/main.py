@@ -1,4 +1,4 @@
-from melodymetrics.gui.mainwindow import MainWindow
+from melodymetrics.gui.main_window import MainWindow
 
 # Create and run the window
 if __name__ == "__main__":

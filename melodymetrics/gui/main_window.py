@@ -5,8 +5,8 @@ from tkinter import ttk
 import pandas as pd
 
 from melodymetrics.exceptions import DatasetNotLoadedException
-from melodymetrics.dataanalysis.dataanalysis import DataAnalysis
-from melodymetrics.dataset.kaggledownload import KaggleDownload
+from melodymetrics.dataanalysis.data_analysis import DataAnalysis
+from melodymetrics.dataset.kaggle_download import KaggleDownload
 
 
 class MainWindow:
