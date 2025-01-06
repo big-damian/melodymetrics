@@ -1,6 +1,8 @@
 import os
 import shutil
+
 from setuptools import setup, find_packages
+
 from melodymetrics import PACKAGE_NAME, __email__, __author__
 
 dir_path = os.path.dirname(os.path.realpath(__file__))

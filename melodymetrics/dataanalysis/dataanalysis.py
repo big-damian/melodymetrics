@@ -1,6 +1,7 @@
-import os
-import pandas as pd
 import datetime as dt
+import os
+
+import pandas as pd
 
 from melodymetrics.custom_exceptions import DatasetNotLoadedException
 
