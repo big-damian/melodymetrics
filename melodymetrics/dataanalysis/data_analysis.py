@@ -26,7 +26,14 @@ class DataAnalysis:
     @property
     def df(self):
         """Getter method for the dataframe (df)."""
-        return self._df
+        try:
+            self.check_if_dataframe_loaded()
+        except DatasetNotLoadedException as e:
+            print(f"Error: {e}")
+            return pd.DataFrame({"No dataframe loaded yet.": [
+                "No dataframe loaded yet."]})
+        else:
+            return self._df
 
     def __str__(self):
         self.check_if_dataframe_loaded()
@@ -151,6 +158,49 @@ class DataAnalysis:
         print(any_null_values_df)
         return any_null_values_df
 
+    def check_outliers_in_columns(self):
+        # Ensure the DataFrame is loaded
+        self.check_if_dataframe_loaded()
+
+        # List of columns to check for outliers
+        columns_to_check = ["danceability", "energy", "speechiness", "acousticness", "instrumentalness", "liveness",
+                            "valence"]
+
+        # Dictionary to store outliers for each column
+        outliers = {}
+
+        # List to accumulate outlier rows for all columns
+        all_outliers = []
+
+        # Check for values outside the range [0, 1] in the specified columns
+        for column in columns_to_check:
+            outlier_rows = self._df[(self._df[column] < 0) | (self._df[column] > 1)]
+            outliers[column] = outlier_rows
+
+            # Add outlier rows to the list of all outliers
+            if not outlier_rows.empty:
+                all_outliers.append(outlier_rows)
+
+        # Print the results for each column
+        for column, outlier_rows in outliers.items():
+            if not outlier_rows.empty:
+                print(f"Outliers detected in column '{column}':")
+                print(outlier_rows)
+            else:
+                print(f"No outliers detected in column '{column}'.")
+
+        # Combine all outlier rows into a single DataFrame (if any)
+        if all_outliers:
+            all_outliers_df = pd.concat(all_outliers, ignore_index=True)
+            print("\nOutliers across all columns:")
+            print(all_outliers_df)
+            return all_outliers_df  # Return the DataFrame containing all outliers
+        else:
+            print("\nNo outliers detected in any of the columns.")
+            return pd.DataFrame({"No outliers detected in any of the columns.": [
+                "No outliers detected in any of the columns."]})  # Return an empty DataFrame if no outliers were found
+
+
     def check_num_unique_values(self):
         self.check_if_dataframe_loaded()
         unique_counts = []
@@ -186,6 +236,16 @@ class DataAnalysis:
 
         # Apply the function to calculate years ago for each row
         self._df["years_ago"] = self._df.apply(get_years_ago, axis=1)
+        print(self._df)
+
+    def convert_duration_to_minutes(self):
+        self.check_if_dataframe_loaded()
+
+        # Convert milliseconds to seconds and apply lambda to return the float with one decimal
+        self._df["duration_ms"] = (self._df["duration_ms"] / 60000).apply(lambda x: float(f"{x:.1f}"))
+        # Rename the column
+        self._df.rename(columns={"duration_ms": "duration_minutes"}, inplace=True)
+
         print(self._df)
 
     def separate_genres(self):
@@ -240,3 +300,5 @@ da.load_csv_dataset()
 # da.drop_duplicates()
 print(da)
 da.find_dataset_duration()
+da.convert_duration_to_minutes()
+print(da)

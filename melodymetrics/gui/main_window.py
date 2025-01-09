@@ -49,6 +49,8 @@ class MainWindow:
                                                            command=self.button_show_dataframe_statistics_action)
         self.button_find_dataset_duration = ttk.Button(self.root, text="Show dataframe duration", style="TButton",
                                                        command=self.button_find_dataset_duration_action)
+        self.button_find_outliers = ttk.Button(self.root, text="Find any outliers", style="TButton",
+                                                       command=self.button_find_outliers_action)
         self.button_check_any_null = ttk.Button(self.root, text="Check nulls in columns", style="TButton",
                                                 command=self.button_check_any_null_action)
         self.button_check_num_unique_values = ttk.Button(self.root, text="Check number of unique values",
@@ -66,6 +68,7 @@ class MainWindow:
         self.button_describe_columns.grid(row=1, column=2, padx=10, pady=5, sticky="ew")
         self.button_show_dataframe_statistics.grid(row=1, column=3, padx=10, pady=5, sticky="ew")
         self.button_find_dataset_duration.grid(row=2, column=0, padx=10, pady=5, sticky="ew")
+        self.button_find_outliers.grid(row=2, column=1, padx=10, pady=5, sticky="ew")
         self.button_check_any_null.grid(row=3, column=0, padx=10, pady=5, sticky="ew")
         self.button_check_num_unique_values.grid(row=3, column=1, padx=10, pady=5, sticky="ew")
         self.button_separate_main_genre.grid(row=3, column=2, padx=10, pady=5, sticky="ew")
@@ -185,6 +188,15 @@ class MainWindow:
         self.label.config(text=f"Total null values in dataframe is {self.da.check_num_null_values()}")
         print("Checked for nulls in dataframe")
         print(f"Total null values in dataframe is {self.da.check_num_null_values()}")
+
+    def button_find_outliers_action(self):
+        self.check_if_dataframe_loaded()
+        aux_df = self.da.check_outliers_in_columns()
+
+        self.update_dataframe_view(aux_df)
+
+        self.label.config(text="Checking outliers")
+        print("Checked outliers...")
 
     def button_check_num_unique_values_action(self):
         self.check_if_dataframe_loaded()
