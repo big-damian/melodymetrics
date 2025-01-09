@@ -41,7 +41,10 @@ class DataAnalysis:
             print(f"DataFrame has been replaced from {self._df.head(2)} to {new_df.head(2)}")
             self._df = new_df
         else:
-            print(f"Can't set a value that is not a DataFrame.")
+            try:
+                raise TypeError("Can't set a value that is not a DataFrame.")
+            except TypeError as e:
+                print(f"Error: {e}")
 
     @df.deleter
     def df(self):
