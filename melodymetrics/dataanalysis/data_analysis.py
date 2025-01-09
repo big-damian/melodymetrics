@@ -35,6 +35,19 @@ class DataAnalysis:
         else:
             return self._df
 
+    @df.setter
+    def df(self, new_df):
+        if isinstance(new_df, pd.DataFrame):
+            print(f"DataFrame has been replaced from {self._df.head(2)} to {new_df.head(2)}")
+            self._df = new_df
+        else:
+            print(f"Can't set a value that is not a DataFrame.")
+
+    @df.deleter
+    def df(self):
+        print("DataFrame attribute has been removed.")
+        self._df = None
+
     def __str__(self):
         self.check_if_dataframe_loaded()
         return self._df.head().to_string()
