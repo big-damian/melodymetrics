@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - ## [0.4.1] - 2025-01-06 - App working good, adheres to school reqs and first .whl file
+  - Renamed custom_exceptions.py to exceptions.py 
+  - Updated all CHANGELOG up to here and gitignore to ignore dist files (.eggs folder)
+
+- ## [0.4.1] - 2025-01-06 - App working good, adheres to school reqs and first .whl file
   - Added License text
   - Fixed small errors in requirements
   - Renamed .bumpversion.cfg to original name setup.cfg
