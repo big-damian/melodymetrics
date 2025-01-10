@@ -1,6 +1,8 @@
-from melodymetrics.gui.main_window import MainWindow
+"""
+Main module. Runs the app starting with its main window
+"""
 
-"""Main module. Runs the app starting with it's main window"""
+from melodymetrics.gui.main_window import MainWindow
 
 
 def main():
