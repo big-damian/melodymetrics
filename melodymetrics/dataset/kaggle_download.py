@@ -43,6 +43,7 @@ class KaggleDownload:
 
             # Move the dataset file
             # TODO: Fix this location "dataset_download_path"
+            # TODO: The .csv file must en up in resources folder
             shutil.move(dataset_download_path, os.getcwd())
 
             # Rename the dataset file TODO: Delete this text "and delete any remains"
