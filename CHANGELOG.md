@@ -5,7 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-- ## [0.4.1] - 2025-01-06 - App working good, adheres to school reqs and first .whl file
+- ## [0.5.0] - 2025-01-11 - App looks pretty good. New window with bar of pie plot!
+  - Added numpy to requirements.txt
+  - Made a super cool Bar of pie chart for the most popular genre
+  - Added Show dataframe info method and button
+  - Big commit:
+    - Added show_dataframe_info method
+    - Added check for genre outliers
+    - Added method to show most frequent genre plot
+    - Modified plot_window.py load_chart method 
+  - Improved main module Docstring
+  - Added sample readme.md
+  - Improved main module
+  - Added setter and deleter methods for df in dataanalysis
+  - Added new plot visualization window
+    - Improved df getter method
+    - Added check outliers
+    - Fixed main window close button
+    - Updated requirements.txt (matplotlib~=3.8.0)
+  - Formatted .py files with PyCharm's help
+  - Renamed script files to complain with PEP8 (added underscores)
   - Renamed custom_exceptions.py to exceptions.py 
   - Updated all CHANGELOG up to here and gitignore to ignore dist files (.eggs folder)
 
