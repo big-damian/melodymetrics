@@ -18,7 +18,7 @@ class PlotWindow:
         # Create the top-level window
         self.chart_window = tk.Toplevel(self.master)
         self.chart_window.title("MelodyMetrics plot visualization")
-        self.chart_window.geometry("600x450")
+        self.chart_window.geometry("1000x500")
 
         # Configure the style for TButton
         style = ttk.Style(self.chart_window)
@@ -58,7 +58,7 @@ class PlotWindow:
         # Remove any existing canvas
         # TODO: Change this
         da = DataAnalysis()
-        fig = da.plot_most_frequent_genres()
+        fig = da.plot_most_frequent_genres_pie(plt_show=False)
         for widget in self.frame.winfo_children():
             widget.destroy()
 
