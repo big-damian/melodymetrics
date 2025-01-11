@@ -4,6 +4,8 @@ from tkinter import ttk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
+from melodymetrics.dataanalysis.data_analysis import DataAnalysis
+
 
 class PlotWindow:
     def __init__(self, master):
@@ -52,14 +54,15 @@ class PlotWindow:
         return fig
 
     def load_chart(self):
-        """Load the chart into the frame."""
+        """Load the provided chart into the frame."""
         # Remove any existing canvas
         # TODO: Change this
+        da = DataAnalysis()
+        fig = da.plot_most_frequent_genres()
         for widget in self.frame.winfo_children():
             widget.destroy()
 
         # Load the chart
-        fig = self.create_chart()
         canvas = FigureCanvasTkAgg(fig, master=self.frame)
         canvas.draw()
         canvas.get_tk_widget().grid(row=0, column=0, sticky="nsew")

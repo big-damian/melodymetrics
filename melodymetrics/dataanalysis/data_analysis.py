@@ -2,6 +2,7 @@ import datetime as dt
 import os
 
 import pandas as pd
+from matplotlib import pyplot as plt
 
 from melodymetrics.exceptions import DatasetNotLoadedException
 
@@ -89,9 +90,11 @@ class DataAnalysis:
 
             # Return the first few rows for verification
             if print_preview:
-                print(self.df.head())
+                print(self._df.head())
 
-            return self.df.head()
+            # TODO: Here I can enable the 'separate_genere' button again in case you load the dataframe again
+
+            return self._df.head()
         except Exception as e:
             print(f"An error occurred: {e}")
             return f"An error occurred: {e}"
@@ -152,6 +155,18 @@ class DataAnalysis:
         print(f"Dataframe columns explanation:\n{explanatory_dataframe.to_string()}")
         return explanatory_dataframe
 
+    def show_dataframe_info(self):
+        self.check_if_dataframe_loaded()
+
+        # Create a DataFrame with the shape information
+        shape_info = {'Rows': self._df.shape[0], 'Columns': self._df.shape[1]}
+        shape_df = pd.DataFrame([shape_info])
+
+        # Append a row with the info message
+        shape_df = shape_df.append({'Rows': 'Dataframe info printed to console', 'Columns': ''}, ignore_index=True)
+
+        return shape_df
+
     def summarize_dataframe_statistics(self):
         self.check_if_dataframe_loaded()
 
@@ -197,6 +212,11 @@ class DataAnalysis:
             if not outlier_rows.empty:
                 all_outliers.append(outlier_rows)
 
+        # Check any outliers in genre
+        outlier_rows = self._df[self._df['genre'] == "set()"]
+        outliers['genre'] = outlier_rows
+        all_outliers.append(outlier_rows)
+
         # Print the results for each column
         for column, outlier_rows in outliers.items():
             if not outlier_rows.empty:
@@ -221,9 +241,9 @@ class DataAnalysis:
         self.check_if_dataframe_loaded()
         unique_counts = []
 
-        for column in self.df.columns:
+        for column in self._df.columns:
             # Calculate the number of unique values in the column
-            unique_count = len(self.df[column].unique())
+            unique_count = len(self._df[column].unique())
             # Create a tuple with the column name and the number of unique values
             column_info = (column, unique_count)
             # Add the tuple to the list
@@ -276,7 +296,7 @@ class DataAnalysis:
             else:
                 return parts[0], None  # Only main genre
 
-        self.df[["genre", "subgenres"]] = self.df["genre"].apply(split_genre).apply(pd.Series)
+        self._df[["genre", "subgenres"]] = self._df["genre"].apply(split_genre).apply(pd.Series)
         print(self._df)
 
     def find_dataset_duration(self):
@@ -302,6 +322,26 @@ class DataAnalysis:
     def clean_dataset(self):
         pass
 
+    def plot_most_frequent_genres(self):
+        self.check_if_dataframe_loaded()
+
+        # Group and count genres
+        df_cleaned = self._df[self._df['genre'] != "set()"]
+        genres = df_cleaned['genre'].str.split(', ').explode()  # Split and "explode" genres
+        genre_counts = genres.value_counts()  # Count occurrences of each genre
+
+        # Create a plot
+        fig, ax = plt.subplots(figsize=(10, 6))  # Create a figure and axes
+        genre_counts.plot(kind='bar', color='skyblue', edgecolor='black', ax=ax)  # Plot on the axes
+        ax.set_title("Most frequent genres", fontsize=16)
+        ax.set_xlabel("Genre", fontsize=14)
+        ax.set_ylabel("Count", fontsize=14)
+        ax.tick_params(axis='x', rotation=45)
+        plt.tight_layout()  # Adjust layout
+        plt.show()
+
+        return fig  # Return the figure object
+
 
 # Example usage:
 da = DataAnalysis(load_dataset=False)
@@ -318,3 +358,11 @@ print(da)
 da.find_dataset_duration()
 da.convert_duration_to_minutes()
 print(da)
+# da.plot_most_frequent_genres()
+
+da = DataAnalysis(load_dataset=False)
+da.find_dataset_csv()
+da.load_csv_dataset()
+da.separate_genres()
+print(da.df['genre'].unique())
+print(da.df.info())
