@@ -158,14 +158,26 @@ class DataAnalysis:
     def show_dataframe_info(self):
         self.check_if_dataframe_loaded()
 
-        # Create a DataFrame with the shape information
-        shape_info = {'Rows': self._df.shape[0], 'Columns': self._df.shape[1]}
+        # TODO: Cambiar los comentarios y nombres de variable
+        # Create a DataFrame with the shape information (Rows and Columns as integers)
+        shape_info = {"Rows": str(self._df.shape[0]), "Columns": str(self._df.shape[1]), "|": "|"}
         shape_df = pd.DataFrame([shape_info])
 
-        # Append a row with the info message
-        shape_df = shape_df.append({'Rows': 'Dataframe info printed to console', 'Columns': ''}, ignore_index=True)
+        # Get the dtypes and convert to DataFrame
+        dtypes_df = pd.DataFrame(self._df.dtypes).reset_index()
+        dtypes_df.columns = ["Column Name", "Dtype"]  # Renaming the columns for clarity
 
-        return shape_df
+        # Add the "|" column to dtypes_df and fill it with "|"
+        dtypes_df["|"] = "|"
+
+        # Concatenate the shape_df with the dtypes_df
+        final_info_df = pd.concat([shape_df, dtypes_df], ignore_index=True)
+
+        # Replace any NaN values with an empty string
+        final_info_df = final_info_df.fillna("")
+
+        print(final_info_df)
+        return final_info_df
 
     def summarize_dataframe_statistics(self):
         self.check_if_dataframe_loaded()
@@ -213,8 +225,8 @@ class DataAnalysis:
                 all_outliers.append(outlier_rows)
 
         # Check any outliers in genre
-        outlier_rows = self._df[self._df['genre'] == "set()"]
-        outliers['genre'] = outlier_rows
+        outlier_rows = self._df[self._df["genre"] == "set()"]
+        outliers["genre"] = outlier_rows
         all_outliers.append(outlier_rows)
 
         # Print the results for each column
@@ -250,7 +262,7 @@ class DataAnalysis:
             unique_counts.append(column_info)
 
         # Convert the list of tuples into a DataFrame
-        unique_values_df = pd.DataFrame(unique_counts, columns=['Column name', 'Unique values'])
+        unique_values_df = pd.DataFrame(unique_counts, columns=["Column name", "Unique values"])
 
         print(unique_values_df)
         return unique_values_df
@@ -303,8 +315,8 @@ class DataAnalysis:
         self.check_if_dataframe_loaded()
 
         # Extract the start and end dates
-        start_date = self._df['year'].min()
-        end_date = self._df['year'].max()
+        start_date = self._df["year"].min()
+        end_date = self._df["year"].max()
 
         # Calculate the duration
         duration = end_date - start_date
@@ -326,17 +338,17 @@ class DataAnalysis:
         self.check_if_dataframe_loaded()
 
         # Group and count genres
-        df_cleaned = self._df[self._df['genre'] != "set()"]
-        genres = df_cleaned['genre'].str.split(', ').explode()  # Split and "explode" genres
+        df_cleaned = self._df[self._df["genre"] != "set()"]
+        genres = df_cleaned["genre"].str.split(", ").explode()  # Split and "explode" genres
         genre_counts = genres.value_counts()  # Count occurrences of each genre
 
         # Create a plot
         fig, ax = plt.subplots(figsize=(10, 6))  # Create a figure and axes
-        genre_counts.plot(kind='bar', color='skyblue', edgecolor='black', ax=ax)  # Plot on the axes
+        genre_counts.plot(kind="bar", color="skyblue", edgecolor="black", ax=ax)  # Plot on the axes
         ax.set_title("Most frequent genres", fontsize=16)
         ax.set_xlabel("Genre", fontsize=14)
         ax.set_ylabel("Count", fontsize=14)
-        ax.tick_params(axis='x', rotation=45)
+        ax.tick_params(axis="x", rotation=45)
         plt.tight_layout()  # Adjust layout
         plt.show()
 
@@ -364,5 +376,5 @@ da = DataAnalysis(load_dataset=False)
 da.find_dataset_csv()
 da.load_csv_dataset()
 da.separate_genres()
-print(da.df['genre'].unique())
+print(da.df["genre"].unique())
 print(da.df.info())

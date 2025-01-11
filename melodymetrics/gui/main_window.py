@@ -45,6 +45,8 @@ class MainWindow:
                                                 command=self.button_load_dataframe_action)
         self.button_describe_columns = ttk.Button(self.root, text="Describe dataframe columns", style="TButton",
                                                   command=self.button_describe_columns_action)
+        self.button_show_df_info = ttk.Button(self.root, text="Show df shape and info", style="TButton",
+                                                  command=self.button_show_df_info_action)
         self.button_show_dataframe_statistics = ttk.Button(self.root, text="Show dataframe statistics", style="TButton",
                                                            command=self.button_show_dataframe_statistics_action)
         self.button_find_dataset_duration = ttk.Button(self.root, text="Show dataframe duration", style="TButton",
@@ -66,9 +68,10 @@ class MainWindow:
         self.button_download_dataframe.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
         self.button_load_dataframe.grid(row=1, column=1, padx=10, pady=5, sticky="ew")
         self.button_describe_columns.grid(row=1, column=2, padx=10, pady=5, sticky="ew")
-        self.button_show_dataframe_statistics.grid(row=1, column=3, padx=10, pady=5, sticky="ew")
-        self.button_find_dataset_duration.grid(row=2, column=0, padx=10, pady=5, sticky="ew")
-        self.button_find_outliers.grid(row=2, column=1, padx=10, pady=5, sticky="ew")
+        self.button_show_df_info.grid(row=1, column=3, padx=10, pady=5, sticky="ew")
+        self.button_show_dataframe_statistics.grid(row=2, column=0, padx=10, pady=5, sticky="ew")
+        self.button_find_dataset_duration.grid(row=2, column=2, padx=10, pady=5, sticky="ew")
+        self.button_find_outliers.grid(row=2, column=3, padx=10, pady=5, sticky="ew")
         self.button_check_any_null.grid(row=3, column=0, padx=10, pady=5, sticky="ew")
         self.button_check_num_unique_values.grid(row=3, column=1, padx=10, pady=5, sticky="ew")
         self.button_separate_main_genre.grid(row=3, column=2, padx=10, pady=5, sticky="ew")
@@ -160,6 +163,15 @@ class MainWindow:
 
         self.label.config(text="Showing dataframe columns explanation")
         print("Showing dataframe columns explanation")
+
+    def button_show_df_info_action(self):
+        self.check_if_dataframe_loaded()
+        aux_df = self.da.show_dataframe_info()
+
+        self.update_dataframe_view(aux_df)
+
+        self.label.config(text="Showing dataframe shape and main information")
+        print("Showing dataframe shape and main information")
 
     def button_show_dataframe_statistics_action(self):
         self.check_if_dataframe_loaded()
