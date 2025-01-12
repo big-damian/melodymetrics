@@ -93,6 +93,7 @@ class MainWindow:
         self.root.grid_columnconfigure(2, weight=1)
         self.root.grid_columnconfigure(3, weight=1)
 
+        # TODO: Add index to the dataframe viewer
         # Dataset frame
         self.frame = ttk.Frame(self.root)
         self.frame.grid(row=6, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
@@ -252,10 +253,6 @@ class MainWindow:
             plot_window.create_widgets()
             plot_window.obtain_da_from_main_window(self.da)
 
-    def run(self):
-        # Start the main event loop
-        self.root.mainloop()
-
     def update_dataframe_view(self, df=None):
 
         if df is None:
@@ -288,6 +285,10 @@ class MainWindow:
         # Add Rows
         for _, row in df.iterrows():
             tree.insert("", "end", values=list(row))
+
+    def run(self):
+        # Start the main event loop
+        self.root.mainloop()
 
 
 class RedirectOutput:
