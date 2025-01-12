@@ -70,26 +70,28 @@ class PlotWindow:
 
     def plot_most_frequent_genres_bar_action(self):
         """Load the provided chart into the frame."""
-        # Remove any existing canvas
-        # TODO: Change this
+        # Get the fig of the plot
         fig = self.da.plot_most_frequent_genres(plt_show=False)
+
+        # Remove any existing canvas
         for widget in self.frame.winfo_children():
             widget.destroy()
 
-        # Load the chart
+        # Load the chart to the canvas
         canvas = FigureCanvasTkAgg(fig, master=self.frame)
         canvas.draw()
         canvas.get_tk_widget().grid(row=0, column=0, sticky="nsew")
 
     def plot_most_frequent_genres_barpie_action(self):
         """Load the provided chart into the frame."""
-        # Remove any existing canvas
-        # TODO: Change this
+        # Get the fig of the plot
         fig = self.da.plot_most_frequent_genres_pie(plt_show=False)
+
+        # Remove any existing canvas
         for widget in self.frame.winfo_children():
             widget.destroy()
 
-        # Load the chart
+        # Load the chart to the canvas
         canvas = FigureCanvasTkAgg(fig, master=self.frame)
         canvas.draw()
         canvas.get_tk_widget().grid(row=0, column=0, sticky="nsew")
