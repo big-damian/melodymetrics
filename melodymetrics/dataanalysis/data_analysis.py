@@ -3,6 +3,7 @@ import os
 
 import numpy as np
 import pandas as pd
+from matplotlib import cm
 from matplotlib import pyplot as plt
 from matplotlib.patches import ConnectionPatch
 
@@ -357,11 +358,6 @@ class DataAnalysis:
 
         return fig  # Return the figure object
 
-    import pandas as pd
-    import matplotlib.pyplot as plt
-    import numpy as np
-    from matplotlib.patches import ConnectionPatch
-
     def plot_most_frequent_genres_pie(self, plt_show):
         self.check_if_dataframe_loaded()
 
@@ -397,7 +393,8 @@ class DataAnalysis:
             exploded_genre_data = genres[~genres.isin(top_genres.index)].value_counts()
 
             # Define colors for the bars
-            colors = plt.cm.Paired(np.linspace(0, 1, len(exploded_genre_data)))
+
+            colors = cm.get_cmap('Paired')(np.linspace(0, 1, len(exploded_genre_data)))
 
             # Bar chart for the breakdown of the exploded "Others" genre
             bar_height = 0  # Start from zero
@@ -424,7 +421,7 @@ class DataAnalysis:
             y = r * np.sin(np.pi / 180 * theta2) + center[1]
             con = ConnectionPatch(xyA=(-0.2 / 2, total_height), coordsA=ax2.transData,
                                   xyB=(x, y), coordsB=ax1.transData)
-            con.set_color([0, 0, 0])
+            con.set_color((0, 0, 0))
             con.set_linewidth(4)
             ax2.add_artist(con)
 
@@ -433,7 +430,7 @@ class DataAnalysis:
             y = r * np.sin(np.pi / 180 * theta1) + center[1]
             con = ConnectionPatch(xyA=(-0.2 / 2, 0), coordsA=ax2.transData,
                                   xyB=(x, y), coordsB=ax1.transData)
-            con.set_color([0, 0, 0])
+            con.set_color((0, 0, 0))
             ax2.add_artist(con)
             con.set_linewidth(4)
 
