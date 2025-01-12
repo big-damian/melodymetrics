@@ -37,23 +37,43 @@ class PlotWindow:
         self.frame.grid_columnconfigure(0, weight=1)
 
         # Add a styled button to load the chart
-        button = ttk.Button(self.chart_window, text="Load Chart", style="TButton", command=self.load_chart)
-        button.grid(row=1, column=0, pady=10)
+        self.plot_most_frequent_genres_bar = ttk.Button(self.chart_window, text="1. Open plot: Most frequent genres (Bar chart)", style="TButton",
+                                                  command=self.plot_most_frequent_genres_bar_action)
+        self.plot_most_frequent_genres_barpie = ttk.Button(self.chart_window,
+                                                           text="2. Open plot: Most frequent genres (Bar of pie chart)",
+                                                           style="TButton",
+                                                           command=self.plot_most_frequent_genres_barpie_action)
+        self.plot_most_frequent_genres_bar.grid(row=1, column=0, columnspan=2, padx=5, pady=10)
+        self.plot_most_frequent_genres_barpie.grid(row=2, column=0, columnspan=2, padx=5, pady=10)
 
-    def create_chart(self):
-        """Create a sample chart to display."""
+    # TODO: Delete this (tras usarlo como ejemplo o lo que sea)
+    # def create_chart(self):
+    #     """Create a sample chart to display."""
+    #     x = [1, 2, 3, 4, 5]
+    #     y = [2, 3, 5, 7, 11]
+    #     fig, ax = plt.subplots()
+    #     ax.plot(x, y, marker='o', linestyle='-', color='b', label='Sample Data')
+    #     ax.set_title('Sample Chart')
+    #     ax.set_xlabel('X-axis')
+    #     ax.set_ylabel('Y-axis')
+    #     ax.legend()
+    #     return fig
+
+    def plot_most_frequent_genres_bar_action(self):
+        """Load the provided chart into the frame."""
+        # Remove any existing canvas
         # TODO: Change this
-        x = [1, 2, 3, 4, 5]
-        y = [2, 3, 5, 7, 11]
-        fig, ax = plt.subplots()
-        ax.plot(x, y, marker='o', linestyle='-', color='b', label='Sample Data')
-        ax.set_title('Sample Chart')
-        ax.set_xlabel('X-axis')
-        ax.set_ylabel('Y-axis')
-        ax.legend()
-        return fig
+        da = DataAnalysis()
+        fig = da.plot_most_frequent_genres(plt_show=False)
+        for widget in self.frame.winfo_children():
+            widget.destroy()
 
-    def load_chart(self):
+        # Load the chart
+        canvas = FigureCanvasTkAgg(fig, master=self.frame)
+        canvas.draw()
+        canvas.get_tk_widget().grid(row=0, column=0, sticky="nsew")
+
+    def plot_most_frequent_genres_barpie_action(self):
         """Load the provided chart into the frame."""
         # Remove any existing canvas
         # TODO: Change this
