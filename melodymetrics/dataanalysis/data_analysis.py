@@ -445,6 +445,12 @@ class DataAnalysis:
 
         return fig  # Return the figure object
 
+    def plot(self):
+        # TODO: Plot of genre evolution in time
+        pass
+
+
+
 
 # Example usage:
 da = DataAnalysis(load_dataset=False)
