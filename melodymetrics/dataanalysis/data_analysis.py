@@ -361,13 +361,14 @@ class DataAnalysis:
     def plot_most_frequent_genres_pie(self, plt_show):
         self.check_if_dataframe_loaded()
 
-        # Separate genres and count their occurrences
-        genres = self._df["genre"].str.split(", ").explode()  # Split and "explode" genres
-        genre_counts = genres.value_counts()
+        # Separate genres and count their occurrences keeping only the main genre
+        genres = self._df["genre"].str.split(",").str[0]  # Split by comma and get the first element
+        genres = genres.str.strip()  # Remove any leading or trailing whitespace
+        genre_counts = genres.value_counts()  # Count occurrences of main genres
 
-        # Separate the top 5 genres and group the rest into "Others"
-        top_genres = genre_counts.head(5)
-        others = genre_counts.iloc[5:]
+        # Separate the top 4 genres and group the rest into "Others"
+        top_genres = genre_counts.head(4)
+        others = genre_counts.iloc[4:]
         genre_counts_other = pd.concat([top_genres, pd.Series({'Others': others.sum()})])
 
         # Create figure and axes for both plots
@@ -379,7 +380,7 @@ class DataAnalysis:
         labels = pie_data.index
         ratios = pie_data.values
         explode = [0.1 if i == len(ratios) - 1 else 0 for i in range(len(ratios))]  # Explode the "Others" slice
-        angle = 21  # Rotate the pie chart
+        angle = 10  # Rotate the pie chart
 
         # Plot the pie chart with exploded "Others" slice
         wedges, *_ = ax1.pie(ratios, autopct='%1.1f%%', startangle=angle, labels=labels, explode=explode)
@@ -435,7 +436,7 @@ class DataAnalysis:
             con.set_linewidth(4)
 
         plt.tight_layout()  # Adjust layout to prevent overlap
-        fig.suptitle('Most Frequent Genres and Breakdown of "Others"', fontsize=16)  # Add main title
+        fig.suptitle('Most Frequent Main Genres Bar of Pie chart', fontsize=16)  # Add main title
 
         if plt_show:
             plt.show()
