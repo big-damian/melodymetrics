@@ -64,6 +64,7 @@ class MainWindow:
                                                       command=self.button_add_years_ago_column_action)
         self.button_open_plot_window = ttk.Button(self.root, text="Open plot visualization window", style="TButton",
                                                   command=self.button_open_plot_window_action)
+        # TODO: Add search row function
 
         self.button_download_dataframe.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
         self.button_load_dataframe.grid(row=1, column=1, padx=10, pady=5, sticky="ew")
