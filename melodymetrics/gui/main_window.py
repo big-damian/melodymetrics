@@ -135,7 +135,7 @@ class MainWindow:
         self.df = self.da.df
 
     def check_if_dataframe_loaded(self):
-        if self.da is None:
+        if not isinstance(self.da, DataAnalysis):
             raise DatasetNotLoadedException
 
     def button_download_dataframe_action(self):
@@ -242,9 +242,15 @@ class MainWindow:
         print("Added new column 'years ago'")
 
     def button_open_plot_window_action(self):
-        # Open the plot window
-        plot_window = PlotWindow(self.root)
-        plot_window.create_widgets()
+        # Open the plot window if dataframe is loaded
+        try:
+            self.check_if_dataframe_loaded()
+        except DatasetNotLoadedException as e:
+            print(f"Couldn't open plot window because dataframe hasn't been loaded yet \nException: {e}")
+        else:
+            plot_window = PlotWindow(self.root)
+            plot_window.create_widgets()
+            plot_window.obtain_da_from_main_window(self.da)
 
     def run(self):
         # Start the main event loop

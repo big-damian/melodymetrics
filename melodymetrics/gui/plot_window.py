@@ -1,10 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
-import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-
-from melodymetrics.dataanalysis.data_analysis import DataAnalysis
 
 
 class PlotWindow:
@@ -12,6 +9,8 @@ class PlotWindow:
         self.master = master
         self.chart_window = None  # Will hold the Toplevel window
         self.frame = None  # Frame for chart
+
+        self.da = None
 
     def create_widgets(self):
         """Create and organize widgets for the plot window."""
@@ -46,6 +45,16 @@ class PlotWindow:
         self.plot_most_frequent_genres_bar.grid(row=1, column=0, columnspan=2, padx=5, pady=10)
         self.plot_most_frequent_genres_barpie.grid(row=2, column=0, columnspan=2, padx=5, pady=10)
 
+
+
+    def obtain_da_from_main_window(self, dataanalysis):
+        self.da = dataanalysis
+        # if isinstance(dataanalysis)
+        #     self.da = dataanalysis
+        # except DatasetNotLoadedException as e:
+        #     print(f"Error: {e}")
+        #     self.chart_window.quit()
+
     # TODO: Delete this (tras usarlo como ejemplo o lo que sea)
     # def create_chart(self):
     #     """Create a sample chart to display."""
@@ -63,8 +72,7 @@ class PlotWindow:
         """Load the provided chart into the frame."""
         # Remove any existing canvas
         # TODO: Change this
-        da = DataAnalysis()
-        fig = da.plot_most_frequent_genres(plt_show=False)
+        fig = self.da.plot_most_frequent_genres(plt_show=False)
         for widget in self.frame.winfo_children():
             widget.destroy()
 
@@ -77,8 +85,7 @@ class PlotWindow:
         """Load the provided chart into the frame."""
         # Remove any existing canvas
         # TODO: Change this
-        da = DataAnalysis()
-        fig = da.plot_most_frequent_genres_pie(plt_show=False)
+        fig = self.da.plot_most_frequent_genres_pie(plt_show=False)
         for widget in self.frame.winfo_children():
             widget.destroy()
 
