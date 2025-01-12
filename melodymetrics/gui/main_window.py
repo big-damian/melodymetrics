@@ -253,15 +253,21 @@ class MainWindow:
             plot_window.create_widgets()
             plot_window.obtain_da_from_main_window(self.da)
 
-    def update_dataframe_view(self, df=None):
-
+    def update_dataframe_view(self, df=None, index=False):
+        """
+        Updates the Treeview widget to display the dataframe with an added index column.
+        """
         if df is None:
             df = self.df
+
+        if index:
+            # Add an "Index" column as the first column
+            columns = [" "] + list(df.columns)
         else:
-            df = df
+            columns = list(df.columns)
 
         # Create Treeview
-        tree = ttk.Treeview(self.frame, columns=list(df.columns), show="headings")
+        tree = ttk.Treeview(self.frame, columns=columns, show="headings")
         tree.grid(row=0, column=0, sticky="nsew")
 
         # Add Scrollbars
@@ -278,13 +284,20 @@ class MainWindow:
         self.frame.grid_columnconfigure(0, weight=1)
 
         # Add Column Headings
-        for col in df.columns:
+        for col in columns:
             tree.heading(col, text=col)
             tree.column(col, width=100, anchor="center")
+        if index:
+            # Add Rows with Index
+            for idx, row in df.iterrows():
+                tree.insert("", "end", values=[idx] + list(row))
+        else:
+            # Add Rows
+            for _, row in df.iterrows():
+                tree.insert("", "end", values=list(row))
 
-        # Add Rows
-        for _, row in df.iterrows():
-            tree.insert("", "end", values=list(row))
+        # Save the Treeview
+        self.tree = tree
 
     def run(self):
         # Start the main event loop
