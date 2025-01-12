@@ -154,7 +154,7 @@ class MainWindow:
         self.load_dataframe_from_analysis()
         self.df = self.df.sort_values(by="popularity", ascending=False)
 
-        self.update_dataframe_view()
+        self.update_dataframe_view(index=True)
         print("Finished loading dataset into dataframe (sorted by most popular).")
 
     def button_describe_columns_action(self):
@@ -207,7 +207,7 @@ class MainWindow:
         self.check_if_dataframe_loaded()
         aux_df = self.da.check_outliers_in_columns()
 
-        self.update_dataframe_view(aux_df)
+        self.update_dataframe_view(aux_df, index=True)
 
         self.label.config(text="Checking outliers")
         print("Checked outliers...")
@@ -225,7 +225,7 @@ class MainWindow:
         self.da.separate_genres()
 
         self.load_dataframe_from_analysis()
-        self.update_dataframe_view()
+        self.update_dataframe_view(index=True)
 
         self.label.config(text="Separated genres into main genre and subgenre")
         print("Separated genres into main genre and subgenre")
@@ -237,7 +237,7 @@ class MainWindow:
         self.da.add_years_ago_column()
 
         self.load_dataframe_from_analysis()
-        self.update_dataframe_view()
+        self.update_dataframe_view(index=True)
 
         self.label.config(text="Added new column 'years ago'")
         print("Added new column 'years ago'")
@@ -262,7 +262,7 @@ class MainWindow:
 
         if index:
             # Add an "Index" column as the first column
-            columns = [" "] + list(df.columns)
+            columns = ["index"] + list(df.columns)
         else:
             columns = list(df.columns)
 
@@ -287,10 +287,12 @@ class MainWindow:
         for col in columns:
             tree.heading(col, text=col)
             tree.column(col, width=100, anchor="center")
+
         if index:
             # Add Rows with Index
-            for idx, row in df.iterrows():
+            for idx, (i, row) in enumerate(df.iterrows(), start=1):
                 tree.insert("", "end", values=[idx] + list(row))
+
         else:
             # Add Rows
             for _, row in df.iterrows():
