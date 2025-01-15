@@ -35,15 +35,20 @@ class PlotWindow:
         self.frame.grid_rowconfigure(0, weight=1)
         self.frame.grid_columnconfigure(0, weight=1)
 
-        # Add a styled button to load the chart
-        self.plot_most_frequent_genres_bar = ttk.Button(self.chart_window, text="1. Open plot: Most frequent genres (Bar chart)", style="TButton",
-                                                  command=self.plot_most_frequent_genres_bar_action)
-        self.plot_most_frequent_genres_barpie = ttk.Button(self.chart_window,
+        # Add buttons
+        self.button_plot_most_frequent_genres_bar = ttk.Button(self.chart_window, text="1. Open plot: Most frequent genres (Bar chart)", style="TButton",
+                                                  command=self.button_plot_most_frequent_genres_bar_action)
+        self.button_plot_most_frequent_genres_barpie = ttk.Button(self.chart_window,
                                                            text="2. Open plot: Most frequent genres (Bar of pie chart)",
                                                            style="TButton",
-                                                           command=self.plot_most_frequent_genres_barpie_action)
-        self.plot_most_frequent_genres_bar.grid(row=1, column=0, columnspan=2, padx=5, pady=10)
-        self.plot_most_frequent_genres_barpie.grid(row=2, column=0, columnspan=2, padx=5, pady=10)
+                                                           command=self.button_plot_most_frequent_genres_barpie_action)
+        self.button_plot_top_genres_evolution = ttk.Button(self.chart_window,
+                                                           text="3. Open plot: Evolution of top three genres over time (Line chart)",
+                                                           style="TButton",
+                                                           command=self.button_plot_top_genres_evolution_action)
+        self.button_plot_most_frequent_genres_bar.grid(row=1, column=0, columnspan=2, padx=5, pady=10)
+        self.button_plot_most_frequent_genres_barpie.grid(row=2, column=0, columnspan=2, padx=5, pady=10)
+        self.button_plot_top_genres_evolution.grid(row=3, column=0, columnspan=2, padx=5, pady=10)
 
 
 
@@ -68,7 +73,7 @@ class PlotWindow:
     #     ax.legend()
     #     return fig
 
-    def plot_most_frequent_genres_bar_action(self):
+    def button_plot_most_frequent_genres_bar_action(self):
         """Load the provided chart into the frame."""
         # Get the fig of the plot
         fig = self.da.plot_most_frequent_genres(plt_show=False)
@@ -82,10 +87,24 @@ class PlotWindow:
         canvas.draw()
         canvas.get_tk_widget().grid(row=0, column=0, sticky="nsew")
 
-    def plot_most_frequent_genres_barpie_action(self):
+    def button_plot_most_frequent_genres_barpie_action(self):
         """Load the provided chart into the frame."""
         # Get the fig of the plot
         fig = self.da.plot_most_frequent_genres_pie(plt_show=False)
+
+        # Remove any existing canvas
+        for widget in self.frame.winfo_children():
+            widget.destroy()
+
+        # Load the chart to the canvas
+        canvas = FigureCanvasTkAgg(fig, master=self.frame)
+        canvas.draw()
+        canvas.get_tk_widget().grid(row=0, column=0, sticky="nsew")
+
+    def button_plot_top_genres_evolution_action(self):
+        """Load the provided chart into the frame."""
+        # Get the fig of the plot
+        fig = self.da.plot_top_genres_evolution(plt_show=False)
 
         # Remove any existing canvas
         for widget in self.frame.winfo_children():
