@@ -17,7 +17,7 @@ class PlotWindow:
         # Create the top-level window
         self.chart_window = tk.Toplevel(self.master)
         self.chart_window.title("MelodyMetrics plot visualization")
-        self.chart_window.geometry("1000x500")
+        self.chart_window.geometry("1000x710")
 
         # Configure the style for TButton
         style = ttk.Style(self.chart_window)
