@@ -358,90 +358,36 @@ class DataAnalysis:
 
         return fig  # Return the figure object
 
-    def plot_most_frequent_genres_pie(self, plt_show):
+    def plot_most_frequent_genres_pie(self, plt_show=True):
         self.check_if_dataframe_loaded()
 
-        # Separate genres and count their occurrences keeping only the main genre
-        genres = self._df["genre"].str.split(",").str[0]  # Split by comma and get the first element
-        genres = genres.str.strip()  # Remove any leading or trailing whitespace
-        genre_counts = genres.value_counts()  # Count occurrences of main genres
+        # Prepare data for plotting
+        genres = self._df["genre"].str.split(",").str[0].str.strip()
+        top_genres = genres.value_counts().head(5).index
+        filtered_data = self._df[self._df["genre"].str.split(",").str[0].str.strip().isin(top_genres)]
+        genre_year_counts = filtered_data.groupby(["year", "genre"]).size().unstack(fill_value=0)
 
-        # Separate the top 4 genres and group the rest into "Others"
-        top_genres = genre_counts.head(4)
-        others = genre_counts.iloc[4:]
-        genre_counts_other = pd.concat([top_genres, pd.Series({'Others': others.sum()})])
+        # Sort genres to maintain consistent color order
+        genre_year_counts = genre_year_counts[top_genres]
 
-        # Create figure and axes for both plots
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 7))  # Increase figure size for better spacing
-        fig.subplots_adjust(wspace=-0.5)  # Reduce space between the pie and bar chart and add right margin
+        # Remove years where all genres have zero counts
+        genre_year_counts = genre_year_counts.loc[(genre_year_counts > 0).any(axis=1)]
 
-        # Pie chart parameters
-        pie_data = genre_counts_other
-        labels = pie_data.index
-        ratios = pie_data.values
-        explode = [0.1 if i == len(ratios) - 1 else 0 for i in range(len(ratios))]  # Explode the "Others" slice
-        angle = 10  # Rotate the pie chart
-
-        # Plot the pie chart with exploded "Others" slice
-        wedges, *_ = ax1.pie(ratios, autopct='%1.1f%%', startangle=angle, labels=labels, explode=explode)
-
-        # Move the pie chart up and make it bigger
-        ax1.set_position([0.1, 0.45, 0.35, 0.6])  # Adjust position and size of the pie chart
-
-        # Bar chart parameters (exploded "Others" breakdown)
-        if 'Others' in genre_counts_other.index:
-            # Break down the "Others" genre
-            exploded_genre_data = genres[~genres.isin(top_genres.index)].value_counts()
-
-            # Define colors for the bars
-
-            colors = cm.get_cmap('Paired')(np.linspace(0, 1, len(exploded_genre_data)))
-
-            # Bar chart for the breakdown of the exploded "Others" genre
-            bar_height = 0  # Start from zero
-            total_height = sum(exploded_genre_data.values)  # Calculate the total height of the bars
-
-            for j, (height, label) in enumerate(
-                    reversed([*zip(exploded_genre_data.values, exploded_genre_data.index)])):
-                bc = ax2.bar(0, height, width=0.2, bottom=bar_height, color=colors[j], label=label)
-                ax2.bar_label(bc, labels=[f"{height / total_height:.1%}"], label_type='center')
-                bar_height += height  # Increment bar height
-
-            ax2.set_title(f'Breakdown of "Others" Genre')
-            handles, labels = ax2.get_legend_handles_labels()  # Get handles and labels
-            ax2.legend(reversed(handles), reversed(labels))  # Reverse the order of the legend
-            ax2.axis('off')
-            ax2.set_xlim(-2.5 * 0.2, 2.5 * 0.2)  # Ensure bars fit properly in the x-axis
-
-            # Use ConnectionPatch to draw lines between the pie and bar chart
-            theta1, theta2 = wedges[-1].theta1, wedges[-1].theta2  # "Others" slice
-            center, r = wedges[-1].center, wedges[-1].r
-
-            # Draw top connecting line
-            x = r * np.cos(np.pi / 180 * theta2) + center[0]
-            y = r * np.sin(np.pi / 180 * theta2) + center[1]
-            con = ConnectionPatch(xyA=(-0.2 / 2, total_height), coordsA=ax2.transData,
-                                  xyB=(x, y), coordsB=ax1.transData)
-            con.set_color((0, 0, 0))
-            con.set_linewidth(4)
-            ax2.add_artist(con)
-
-            # Draw bottom connecting line
-            x = r * np.cos(np.pi / 180 * theta1) + center[0]
-            y = r * np.sin(np.pi / 180 * theta1) + center[1]
-            con = ConnectionPatch(xyA=(-0.2 / 2, 0), coordsA=ax2.transData,
-                                  xyB=(x, y), coordsB=ax1.transData)
-            con.set_color((0, 0, 0))
-            ax2.add_artist(con)
-            con.set_linewidth(4)
-
-        plt.tight_layout()  # Adjust layout to prevent overlap
-        fig.suptitle('Most Frequent Main Genres Bar of Pie chart', fontsize=16)  # Add main title
+        # Plot line chart
+        fig, ax = plt.subplots(figsize=(10, 6))
+        genre_year_counts.plot(ax=ax, linewidth=2)
+        ax.set_title('Top 5 Genres Evolution Over Time (Line Chart)', fontsize=16)
+        ax.set_xlabel('Year', fontsize=12)
+        ax.set_ylabel('Number of Songs', fontsize=12)
+        ax.legend(title='Genre', bbox_to_anchor=(1.05, 1), loc='upper left')
+        plt.tight_layout()
 
         if plt_show:
             plt.show()
-
-        return fig  # Return the figure object
+        print(genre_year_counts.tail(10))
+        print("---")
+        print(self._df[self._df["year"] >= 2020])
+        return fig
 
     def plot(self):
         # TODO: Plot of genre evolution in time
