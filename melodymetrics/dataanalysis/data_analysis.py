@@ -362,31 +362,42 @@ class DataAnalysis:
         self.check_if_dataframe_loaded()
 
         # Prepare data for plotting
+        self._df['year'] = self._df['year'].astype(int)
         genres = self._df["genre"].str.split(",").str[0].str.strip()
-        top_genres = genres.value_counts().head(5).index
+        top_genres = genres.value_counts().head(3).index
         filtered_data = self._df[self._df["genre"].str.split(",").str[0].str.strip().isin(top_genres)]
         genre_year_counts = filtered_data.groupby(["year", "genre"]).size().unstack(fill_value=0)
 
         # Sort genres to maintain consistent color order
         genre_year_counts = genre_year_counts[top_genres]
 
-        # Remove years where all genres have zero counts
-        genre_year_counts = genre_year_counts.loc[(genre_year_counts > 0).any(axis=1)]
+        # Remove years where all genres have low counts
+        genre_year_counts = genre_year_counts.loc[(genre_year_counts > 4).any(axis=1)]
 
         # Plot line chart
         fig, ax = plt.subplots(figsize=(10, 6))
         genre_year_counts.plot(ax=ax, linewidth=2)
-        ax.set_title('Top 5 Genres Evolution Over Time (Line Chart)', fontsize=16)
+
+        # Set x-axis ticks for each year with a range rotated 45 degrees
+        ax.set_xticks(range(genre_year_counts.index.min(), genre_year_counts.index.max() + 1))
+        ax.tick_params(axis='x', rotation=45)
+
+        # Set titles and labels
+        ax.set_title('Top 3 Genres Evolution Over Time (Line Chart)', fontsize=16)
         ax.set_xlabel('Year', fontsize=12)
         ax.set_ylabel('Number of Songs', fontsize=12)
         ax.legend(title='Genre', bbox_to_anchor=(1.05, 1), loc='upper left')
+
+        # Adjust layout
         plt.tight_layout()
 
         if plt_show:
             plt.show()
-        print(genre_year_counts.tail(10))
-        print("---")
-        print(self._df[self._df["year"] >= 2020])
+
+        # print(genre_year_counts.tail(10))
+        # print("---")
+        # print(self._df[self._df["year"] >= 2020])
+
         return fig
 
     def plot(self):
