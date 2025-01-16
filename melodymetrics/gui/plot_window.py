@@ -17,7 +17,7 @@ class PlotWindow:
         # Create the top-level window
         self.chart_window = tk.Toplevel(self.master)
         self.chart_window.title("MelodyMetrics plot visualization")
-        self.chart_window.geometry("1000x710")
+        self.chart_window.geometry("1000x650")
 
         # Configure the style for TButton
         style = ttk.Style(self.chart_window)
@@ -29,7 +29,7 @@ class PlotWindow:
 
         # Create a frame for the chart
         self.frame = ttk.Frame(self.chart_window, padding=5, relief=tk.SUNKEN)
-        self.frame.grid(row=0, column=0, sticky="nsew")
+        self.frame.grid(row=0, column=0, columnspan=4, sticky="nsew")
 
         # Allow the frame to expand
         self.frame.grid_rowconfigure(0, weight=1)
@@ -52,10 +52,10 @@ class PlotWindow:
                                                                text="4. Open plot: Evolution of explicit songs in the top charts (Line chart)",
                                                                style="TButton",
                                                                command=self.button_plot_explicit_songs_evolution_action)
-        self.button_plot_most_frequent_genres_bar.grid(row=1, column=0, columnspan=2, padx=5, pady=10)
-        self.button_plot_most_frequent_genres_barpie.grid(row=2, column=0, columnspan=2, padx=5, pady=10)
-        self.button_plot_top_genres_evolution.grid(row=3, column=0, columnspan=2, padx=5, pady=10)
-        self.button_plot_explicit_songs_evolution.grid(row=4, column=0, columnspan=2, padx=5, pady=10)
+        self.button_plot_most_frequent_genres_bar.grid(row=1, column=0, columnspan=2, padx=15, pady=10, sticky="ew")
+        self.button_plot_most_frequent_genres_barpie.grid(row=1, column=2, columnspan=2, padx=15, pady=10, sticky="ew")
+        self.button_plot_top_genres_evolution.grid(row=2, column=0, columnspan=2, padx=15, pady=10, sticky="ew")
+        self.button_plot_explicit_songs_evolution.grid(row=2, column=2, columnspan=2, padx=15, pady=10, sticky="ew")
 
 
 
