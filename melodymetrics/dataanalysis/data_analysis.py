@@ -242,15 +242,18 @@ class DataAnalysis:
 
         # Combine all outlier rows into a single DataFrame (if any)
         if all_outliers:
-            all_outliers_df = pd.concat(all_outliers, ignore_index=True)
+            all_outliers_df = pd.concat(all_outliers, ignore_index=False)  # Ignore index False to keep the original indices
             print("\nOutliers across all columns:")
             print(all_outliers_df)
+
+            # Drop the outlier rows from the original DataFrame using their indices
+            self._df = self._df.drop(all_outliers_df.index).reset_index(drop=True)
+            print("\nThese outliers have been removed from the DataFrame.")
             return all_outliers_df  # Return the DataFrame containing all outliers
         else:
             print("\nNo outliers detected in any of the columns.")
             return pd.DataFrame({"No outliers detected in any of the columns.": [
                 "No outliers detected in any of the columns."]})  # Return an empty DataFrame if no outliers were found
-
 
     def check_num_unique_values(self):
         self.check_if_dataframe_loaded()

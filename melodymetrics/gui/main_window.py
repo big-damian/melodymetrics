@@ -209,7 +209,7 @@ class MainWindow:
 
         self.update_dataframe_view(aux_df, index=True)
 
-        self.label.config(text="Checking outliers")
+        self.label.config(text="Checking and deleting any outliers")
         print("Checked outliers...")
 
     def button_check_num_unique_values_action(self):
