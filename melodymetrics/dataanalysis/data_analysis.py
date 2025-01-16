@@ -486,11 +486,43 @@ class DataAnalysis:
 
         return fig
 
-    def plot(self):
-        # TODO: Think of the last idea
-        pass
+    def plot_explicit_songs_evolution(self, plt_show=True):
+        # Ensure dataframe is loaded
+        self.check_if_dataframe_loaded()
 
+        # Prepare data for plotting
+        self._df['year'] = self._df['year'].astype(int)
 
+        # Count explicit songs by year
+        explicit_year_counts = (
+            self._df[self._df['explicit'] == True]
+            .groupby('year')
+            .size()
+        )
+
+        # Remove years with no explicit songs
+        explicit_year_counts = explicit_year_counts[explicit_year_counts > 4]
+
+        # Plot line chart
+        fig, ax = plt.subplots(figsize=(10, 6))
+        explicit_year_counts.plot(ax=ax, kind='line', linewidth=2, marker='o')
+
+        # Set x-axis ticks for each year with a range rotated 45 degrees
+        ax.set_xticks(range(explicit_year_counts.index.min(), explicit_year_counts.index.max() + 1))
+        ax.tick_params(axis='x', rotation=45)
+
+        # Set titles and labels
+        ax.set_title('Evolution of Explicit Songs Over Time', fontsize=16)
+        ax.set_xlabel('Year', fontsize=12)
+        ax.set_ylabel('Number of Explicit Songs', fontsize=12)
+
+        # Adjust layout
+        plt.tight_layout()
+
+        if plt_show:
+            plt.show()
+
+        return fig
 
 
 # Example usage:
