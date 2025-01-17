@@ -36,8 +36,12 @@ class MainWindow:
 
     def create_widgets(self):
         # Label
-        self.label = ttk.Label(self.root, text="Welcome to MelodyMetrics!", font=("Arial", 14))
+        self.label = ttk.Label(self.root, text="Welcome to MelodyMetrics!", style=None)
         self.label.grid(row=0, column=0, columnspan=4, pady=10)
+
+        # Left-aligned label inside the LabelFrame
+        self.label_info = ttk.Label(self.root, text="Choose an action to perform on the dataset:", anchor="w")
+        self.label_info.grid(row=0, column=0, columnspan=4, padx=5, pady=(0, 10), sticky="w")  # Left-align with sticky="w"
 
         # Buttons
         self.button_download_dataframe = ttk.Button(self.root, text="Download Kaggle dataframe", style="TButton",
