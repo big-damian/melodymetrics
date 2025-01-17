@@ -22,6 +22,7 @@ class MainWindow:
         # Define a style for ttk widgets
         self.style = ttk.Style()
         self.style.theme_use('clam')  # Use a modern theme
+        # TODO: Change this theme or leave it as is
         self.style.configure('TButton', font=('Arial', 12), padding=10, background='#4CAF50', foreground='white')
         self.style.map('TButton', background=[('active', '#45A049')])
 
