@@ -154,7 +154,7 @@ class DataAnalysis:
                 "Detects the presence of an audience in the recording.",
                 "Describes the musical positiveness of a track (0.0 to 1.0).",
                 "The estimated tempo of a track in beats per minute (BPM).",
-                "Genre of the track."]})
+                "Genres of the track."]})
         print(f"Dataframe columns explanation:\n{explanatory_dataframe.to_string()}")
         return explanatory_dataframe
 
@@ -226,6 +226,16 @@ class DataAnalysis:
             # Add outlier rows to the list of all outliers
             if not outlier_rows.empty:
                 all_outliers.append(outlier_rows)
+
+        # Check any outliers in year
+        outlier_rows = self._df[(self._df["year"] > int(dt.date.today().year)) | (self._df["year"] < 1900)]
+        outliers["year"] = outlier_rows
+        all_outliers.append(outlier_rows)
+
+        # Check any outliers in popularity
+        outlier_rows = self._df[(self._df["popularity"] > 100) | (self._df["popularity"] < 0)]
+        outliers["popularity"] = outlier_rows
+        all_outliers.append(outlier_rows)
 
         # Check any outliers in genre
         outlier_rows = self._df[self._df["genre"] == "set()"]
