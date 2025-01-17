@@ -38,31 +38,35 @@ class MainWindow:
         self.label = ttk.Label(self.root, text="Welcome to MelodyMetrics!", font=("Arial", 14))
         self.label.grid(row=0, column=0, columnspan=4, pady=10)
 
+        # Create a LabelFrame for the buttons
+        self.button_frame = ttk.LabelFrame(self.root, text="EDA Actions (Exploratory Data Analysis)", padding=(10, 10))
+        self.button_frame.grid(row=1, column=0, columnspan=4, rowspan=5, padx=10, pady=10, sticky="nsew")
+
         # Buttons
-        self.button_download_dataframe = ttk.Button(self.root, text="Download Kaggle dataframe", style="TButton",
+        self.button_download_dataframe = ttk.Button(self.button_frame, text="Download Kaggle dataframe", style="TButton",
                                                     command=self.button_download_dataframe_action)
-        self.button_load_dataframe = ttk.Button(self.root, text="Load dataframe", style="TButton",
+        self.button_load_dataframe = ttk.Button(self.button_frame, text="Load dataframe", style="TButton",
                                                 command=self.button_load_dataframe_action)
-        self.button_describe_columns = ttk.Button(self.root, text="Describe dataframe columns", style="TButton",
+        self.button_describe_columns = ttk.Button(self.button_frame, text="Describe dataframe columns", style="TButton",
                                                   command=self.button_describe_columns_action)
-        self.button_show_df_info = ttk.Button(self.root, text="Show df shape and info", style="TButton",
+        self.button_show_df_info = ttk.Button(self.button_frame, text="Show df shape and info", style="TButton",
                                                   command=self.button_show_df_info_action)
-        self.button_show_dataframe_statistics = ttk.Button(self.root, text="Show dataframe statistics", style="TButton",
+        self.button_show_dataframe_statistics = ttk.Button(self.button_frame, text="Show dataframe statistics", style="TButton",
                                                            command=self.button_show_dataframe_statistics_action)
-        self.button_find_dataset_duration = ttk.Button(self.root, text="Show dataframe duration", style="TButton",
+        self.button_find_dataset_duration = ttk.Button(self.button_frame, text="Show dataframe duration", style="TButton",
                                                        command=self.button_find_dataset_duration_action)
-        self.button_find_outliers = ttk.Button(self.root, text="Find any outliers", style="TButton",
+        self.button_find_outliers = ttk.Button(self.button_frame, text="Find any outliers", style="TButton",
                                                        command=self.button_find_outliers_action)
-        self.button_check_any_null = ttk.Button(self.root, text="Check nulls in columns", style="TButton",
+        self.button_check_any_null = ttk.Button(self.button_frame, text="Check nulls in columns", style="TButton",
                                                 command=self.button_check_any_null_action)
-        self.button_check_num_unique_values = ttk.Button(self.root, text="Check number of unique values",
+        self.button_check_num_unique_values = ttk.Button(self.button_frame, text="Check number of unique values",
                                                          style="TButton",
                                                          command=self.button_check_num_unique_values_action)
-        self.button_separate_main_genre = ttk.Button(self.root, text="Separate genres", style="TButton",
+        self.button_separate_main_genre = ttk.Button(self.button_frame, text="Separate genres", style="TButton",
                                                      command=self.button_separate_main_genre_action)
-        self.button_add_years_ago_column = ttk.Button(self.root, text="Add years ago column", style="TButton",
+        self.button_add_years_ago_column = ttk.Button(self.button_frame, text="Add years ago column", style="TButton",
                                                       command=self.button_add_years_ago_column_action)
-        self.button_open_plot_window = ttk.Button(self.root, text="Open plot visualization window", style="TButton",
+        self.button_open_plot_window = ttk.Button(self.button_frame, text="Open plot visualization window", style="TButton",
                                                   command=self.button_open_plot_window_action)
         # TODO: Add search row function
 
