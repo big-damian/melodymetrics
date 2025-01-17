@@ -36,7 +36,7 @@ class MainWindow:
 
     def create_widgets(self):
         # Label
-        self.label = ttk.Label(self.root, text="Welcome to MelodyMetrics!", style=None)
+        self.label = ttk.Label(self.root, text="Welcome to MelodyMetrics!", font=("Arial", 14))
         self.label.grid(row=0, column=0, columnspan=4, pady=10)
 
         # Left-aligned label inside the LabelFrame
