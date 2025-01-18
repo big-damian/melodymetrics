@@ -40,23 +40,36 @@ class MainWindow:
 
         # Create a LabelFrame for the buttons
         self.button_frame = ttk.LabelFrame(self.root, text="EDA Actions (Exploratory Data Analysis)", padding=(10, 10))
-        self.button_frame.grid(row=1, column=0, columnspan=4, rowspan=5, padx=10, pady=10, sticky="nsew")
+        self.button_frame.grid(row=1, column=0, columnspan=4, rowspan=5, padx=10, pady=5, sticky="nsew")
+
+        # Configure weight for the LabelFrame to expand with the window
+        self.root.grid_rowconfigure(1, weight=1)
+        self.root.grid_columnconfigure(0, weight=1)
+
+        # Configure weights for rows and columns inside the LabelFrame
+        for i in range(5):  # Adjust the range if you add more rows
+            self.button_frame.grid_rowconfigure(i, weight=1)
+        for j in range(4):  # Adjust the range if you add more columns
+            self.button_frame.grid_columnconfigure(j, weight=1)
 
         # Buttons
-        self.button_download_dataframe = ttk.Button(self.button_frame, text="Download Kaggle dataframe", style="TButton",
+        self.button_download_dataframe = ttk.Button(self.button_frame, text="Download Kaggle dataframe",
+                                                    style="TButton",
                                                     command=self.button_download_dataframe_action)
         self.button_load_dataframe = ttk.Button(self.button_frame, text="Load dataframe", style="TButton",
                                                 command=self.button_load_dataframe_action)
         self.button_describe_columns = ttk.Button(self.button_frame, text="Describe dataframe columns", style="TButton",
                                                   command=self.button_describe_columns_action)
         self.button_show_df_info = ttk.Button(self.button_frame, text="Show df shape and info", style="TButton",
-                                                  command=self.button_show_df_info_action)
-        self.button_show_dataframe_statistics = ttk.Button(self.button_frame, text="Show dataframe statistics", style="TButton",
+                                              command=self.button_show_df_info_action)
+        self.button_show_dataframe_statistics = ttk.Button(self.button_frame, text="Show dataframe statistics",
+                                                           style="TButton",
                                                            command=self.button_show_dataframe_statistics_action)
-        self.button_find_dataset_duration = ttk.Button(self.button_frame, text="Show dataframe duration", style="TButton",
+        self.button_find_dataset_duration = ttk.Button(self.button_frame, text="Show dataframe duration",
+                                                       style="TButton",
                                                        command=self.button_find_dataset_duration_action)
         self.button_find_outliers = ttk.Button(self.button_frame, text="Find any outliers", style="TButton",
-                                                       command=self.button_find_outliers_action)
+                                               command=self.button_find_outliers_action)
         self.button_check_any_null = ttk.Button(self.button_frame, text="Check nulls in columns", style="TButton",
                                                 command=self.button_check_any_null_action)
         self.button_check_num_unique_values = ttk.Button(self.button_frame, text="Check number of unique values",
@@ -66,22 +79,23 @@ class MainWindow:
                                                      command=self.button_separate_main_genre_action)
         self.button_add_years_ago_column = ttk.Button(self.button_frame, text="Add years ago column", style="TButton",
                                                       command=self.button_add_years_ago_column_action)
-        self.button_open_plot_window = ttk.Button(self.button_frame, text="Open plot visualization window", style="TButton",
+        self.button_open_plot_window = ttk.Button(self.button_frame, text="Open plot visualization window",
+                                                  style="TButton",
                                                   command=self.button_open_plot_window_action)
-        # TODO: Add search row function
 
-        self.button_download_dataframe.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
-        self.button_load_dataframe.grid(row=1, column=1, padx=10, pady=5, sticky="ew")
-        self.button_describe_columns.grid(row=1, column=2, padx=10, pady=5, sticky="ew")
-        self.button_show_df_info.grid(row=1, column=3, padx=10, pady=5, sticky="ew")
-        self.button_show_dataframe_statistics.grid(row=2, column=0, padx=10, pady=5, sticky="ew")
-        self.button_find_dataset_duration.grid(row=2, column=2, padx=10, pady=5, sticky="ew")
-        self.button_find_outliers.grid(row=2, column=3, padx=10, pady=5, sticky="ew")
-        self.button_check_any_null.grid(row=3, column=0, padx=10, pady=5, sticky="ew")
-        self.button_check_num_unique_values.grid(row=3, column=1, padx=10, pady=5, sticky="ew")
-        self.button_separate_main_genre.grid(row=3, column=2, padx=10, pady=5, sticky="ew")
-        self.button_add_years_ago_column.grid(row=3, column=3, padx=10, pady=5, sticky="ew")
-        self.button_open_plot_window.grid(row=4, column=1, columnspan=2, padx=10, pady=5, sticky="ew")
+        # Arrange buttons in the LabelFrame
+        self.button_download_dataframe.grid(row=1, column=0, padx=10, pady=5, sticky="nsew")
+        self.button_load_dataframe.grid(row=1, column=1, padx=10, pady=5, sticky="nsew")
+        self.button_describe_columns.grid(row=1, column=2, padx=10, pady=5, sticky="nsew")
+        self.button_show_df_info.grid(row=1, column=3, padx=10, pady=5, sticky="nsew")
+        self.button_show_dataframe_statistics.grid(row=2, column=0, padx=10, pady=5, sticky="nsew")
+        self.button_find_dataset_duration.grid(row=2, column=2, padx=10, pady=5, sticky="nsew")
+        self.button_find_outliers.grid(row=2, column=3, padx=10, pady=5, sticky="nsew")
+        self.button_check_any_null.grid(row=3, column=0, padx=10, pady=5, sticky="nsew")
+        self.button_check_num_unique_values.grid(row=3, column=1, padx=10, pady=5, sticky="nsew")
+        self.button_separate_main_genre.grid(row=3, column=2, padx=10, pady=5, sticky="nsew")
+        self.button_add_years_ago_column.grid(row=3, column=3, padx=10, pady=5, sticky="nsew")
+        self.button_open_plot_window.grid(row=4, column=1, columnspan=2, padx=10, pady=5, sticky="nsew")
 
         # Adding weight to rows and columns
         self.root.grid_rowconfigure(0, weight=1)
