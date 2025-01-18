@@ -36,12 +36,12 @@ class MainWindow:
 
     def create_widgets(self):
         # Label
-        self.label = ttk.Label(self.root, text="Welcome to MelodyMetrics!", font=("Arial", 14))
-        self.label.grid(row=0, column=0, columnspan=4, pady=10)
+        self.label = ttk.Label(self.root, text="Welcome to MelodyMetrics!\nSelect", font=("Arial", 14))
+        self.label.grid(row=0, column=0, columnspan=4, pady=(10, 30))
 
         # Left-aligned label inside the LabelFrame
-        self.label_info = ttk.Label(self.root, text="Choose an action to perform on the dataset:", anchor="w")
-        self.label_info.grid(row=0, column=0, columnspan=4, padx=5, pady=(0, 10), sticky="w")  # Left-align with sticky="w"
+        self.label_info = ttk.Label(self.root, text="EDA Actions (Exploratory Data Analysis):", anchor="sw")
+        self.label_info.grid(row=1, column=0, columnspan=4, padx=10, pady=(40, 0), sticky="w")  # Left-align with sticky="w"
 
         # Buttons
         self.button_download_dataframe = ttk.Button(self.root, text="Download Kaggle dataframe", style="TButton",
@@ -71,18 +71,18 @@ class MainWindow:
                                                   command=self.button_open_plot_window_action)
         # TODO: Add search row function
 
-        self.button_download_dataframe.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
-        self.button_load_dataframe.grid(row=1, column=1, padx=10, pady=5, sticky="ew")
-        self.button_describe_columns.grid(row=1, column=2, padx=10, pady=5, sticky="ew")
-        self.button_show_df_info.grid(row=1, column=3, padx=10, pady=5, sticky="ew")
-        self.button_show_dataframe_statistics.grid(row=2, column=0, padx=10, pady=5, sticky="ew")
-        self.button_find_dataset_duration.grid(row=2, column=2, padx=10, pady=5, sticky="ew")
-        self.button_find_outliers.grid(row=2, column=3, padx=10, pady=5, sticky="ew")
-        self.button_check_any_null.grid(row=3, column=0, padx=10, pady=5, sticky="ew")
-        self.button_check_num_unique_values.grid(row=3, column=1, padx=10, pady=5, sticky="ew")
-        self.button_separate_main_genre.grid(row=3, column=2, padx=10, pady=5, sticky="ew")
-        self.button_add_years_ago_column.grid(row=3, column=3, padx=10, pady=5, sticky="ew")
-        self.button_open_plot_window.grid(row=4, column=1, columnspan=2, padx=10, pady=5, sticky="ew")
+        self.button_download_dataframe.grid(row=2, column=0, padx=10, pady=5, sticky="ew")
+        self.button_load_dataframe.grid(row=2, column=1, padx=10, pady=5, sticky="ew")
+        self.button_describe_columns.grid(row=2, column=2, padx=10, pady=5, sticky="ew")
+        self.button_show_df_info.grid(row=2, column=3, padx=10, pady=5, sticky="ew")
+        self.button_show_dataframe_statistics.grid(row=3, column=0, padx=10, pady=5, sticky="ew")
+        self.button_find_dataset_duration.grid(row=3, column=2, padx=10, pady=5, sticky="ew")
+        self.button_find_outliers.grid(row=3, column=3, padx=10, pady=5, sticky="ew")
+        self.button_check_any_null.grid(row=4, column=0, padx=10, pady=5, sticky="ew")
+        self.button_check_num_unique_values.grid(row=4, column=1, padx=10, pady=5, sticky="ew")
+        self.button_separate_main_genre.grid(row=4, column=2, padx=10, pady=5, sticky="ew")
+        self.button_add_years_ago_column.grid(row=4, column=3, padx=10, pady=5, sticky="ew")
+        self.button_open_plot_window.grid(row=5, column=1, columnspan=2, padx=10, pady=5, sticky="ew")
 
         # Adding weight to rows and columns
         self.root.grid_rowconfigure(0, weight=1)
@@ -101,7 +101,7 @@ class MainWindow:
         # TODO: Add index to the dataframe viewer
         # Dataset frame
         self.frame = ttk.Frame(self.root)
-        self.frame.grid(row=6, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
+        self.frame.grid(row=7, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
 
         # Treeview for the dataframe
         self.tree = ttk.Treeview(self.frame, columns=list(self.df.columns), show="headings")
@@ -125,7 +125,7 @@ class MainWindow:
         # Console output
         self.console_output = tk.Text(self.root, wrap="word", height=10)
         self.console_output.bind("<Key>", "break")  # Disable writing in the text field
-        self.console_output.grid(row=7, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
+        self.console_output.grid(row=8, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
 
         # Redirect stdout to the console output
         sys.stdout = RedirectOutput(self.console_output)
