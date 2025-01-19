@@ -98,8 +98,11 @@ class MainWindow:
                                                     style="TButton", command=self.button_download_dataframe_action)
         self.button_load_dataframe = ttk.Button(self.first_steps_frame, text="Load dataframe .csv",
                                                 style="TButton", command=self.button_load_dataframe_action)
+        self.button_see_actual_dataframe = ttk.Button(self.first_steps_frame, text="See actual dataframe",
+                                                style="TButton", command=self.button_see_actual_dataframe_action)
         self.button_download_dataframe.grid(row=0, column=0, padx=10, pady=5, sticky="ew")
         self.button_load_dataframe.grid(row=0, column=1, padx=10, pady=5, sticky="ew")
+        self.button_see_actual_dataframe.grid(row=1, column=0, columnspan=2, padx=10, pady=5, sticky="ew")
 
         # Data Preprocessing LabelFrame
         self.data_preprocessing_frame = ttk.LabelFrame(self.root, text="Data preprocessing:", padding=(10, 10))
@@ -272,6 +275,20 @@ class MainWindow:
 
             self.update_dataframe_view(index=True)
             print("Finished loading dataset into dataframe (sorted by most popular).")
+
+    def button_see_actual_dataframe_action(self):
+        """
+        Action triggered by the 'See actual dataframe' button.
+
+        This method displays the actual dataframe. It loads the dataframe
+        to the GUI.
+        """
+        self.check_if_dataframe_loaded()
+
+        self.update_dataframe_view(self.df)
+
+        self.label.config(text="Actual dataframe:")
+        print("Showing actual dataframe:")
 
     def button_describe_columns_action(self):
         """
