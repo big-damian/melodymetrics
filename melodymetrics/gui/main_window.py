@@ -20,11 +20,17 @@ class MainWindow:
         # self.root.configure(bg="#F5F5F5")  # Set a background color
 
         # Define a style for ttk widgets
-        # TODO: Change this theme or leave it as is
+        # TODO: Change this theme or leave it as is ('winnative', 'clam', 'alt', 'default', 'classic', 'vista', 'xpnative')
         self.style = ttk.Style()
         self.style.theme_use('clam')  # Use a modern theme
+
+        # Main style (green)
         self.style.configure('TButton', font=('Arial', 11), padding=3, background='#4CAF50', foreground='white')
         self.style.map('TButton', background=[('active', '#45A049')])
+
+        # Secondary style (red)
+        self.style.configure('Red.TButton', font=('Arial', 11), padding=3, background='#F44336', foreground='white')
+        self.style.map('Red.TButton', background=[('active', '#E53935')])
 
         # Other attributes
         self.da = None
@@ -90,7 +96,7 @@ class MainWindow:
                                                          style="TButton",
                                                          command=self.button_check_num_unique_values_action)
         self.button_open_plot_window = ttk.Button(self.eda_actions_frame, text="Open plot visualization window",
-                                                  style="TButton", command=self.button_open_plot_window_action)
+                                                  style='Red.TButton', command=self.button_open_plot_window_action)
         self.button_describe_columns.grid(row=0, column=0, padx=10, pady=5, sticky="nsew")
         self.button_show_df_info.grid(row=0, column=1, padx=10, pady=5, sticky="nsew")
         self.button_show_dataframe_statistics.grid(row=1, column=0, padx=10, pady=5, sticky="nsew")
