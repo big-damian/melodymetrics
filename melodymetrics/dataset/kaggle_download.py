@@ -1,3 +1,13 @@
+"""
+Module for handling the download and extraction of Kaggle datasets.
+Provides functionality to download specific datasets, move and rename them.
+
+Imports:
+- os: Provides functions for interacting with the operating system, like file handling.
+- shutil: Provides functions for high-level file operations, like moving and renaming files.
+- kagglehub: Used for interacting with Kaggle to download datasets.
+"""
+
 import os
 import shutil
 
@@ -5,14 +15,27 @@ import kagglehub
 
 
 class KaggleDownload:
+    """
+    A class for managing Kaggle dataset downloads and file operations.
+
+    Methods
+    -------
+    __init__:
+        Initializes the KaggleDownload class.
+
+    dataset_download:
+        Downloads a specific Kaggle dataset and processes the file.
+    """
 
     def __init__(self):
         """
         Initialize the KaggleDownload class.
 
-        Parameters:
-        - download_path (str): Datasets that will be downloaded.
+        Parameters
+        ----------
+        None
         """
+        pass
 
     @staticmethod
     def dataset_download(dataset_id="paradisejoy/top-hits-spotify-from-20002019",
@@ -21,10 +44,19 @@ class KaggleDownload:
         """
         Download and extract a Kaggle dataset.
 
-        Parameters:
-        - dataset_id (str): The Kaggle dataset identifier (e.g., "paradisejoy/top-hits-spotify-from-20002019").
-        - path (str): The Kaggle path to single file (e.g., "songs_normalize.csv").
-        - new_dataset_filename (str): New filename for the dataset (e.g., "spotify_top_hits_2020.csv")
+        Parameters
+        ----------
+        dataset_id : str, optional
+            The Kaggle dataset identifier (e.g., "paradisejoy/top-hits-spotify-from-20002019").
+        file_path : str, optional
+            The Kaggle path to the single file (e.g., "songs_normalize.csv").
+        new_dataset_filename : str, optional
+            New filename for the dataset (e.g., "spotify_top_hits_2020.csv").
+
+        Returns
+        -------
+        None
+            Prints the status of the dataset download process.
         """
 
         print(f"Downloading dataset: {dataset_id}")
@@ -37,16 +69,17 @@ class KaggleDownload:
 
             # Delete any existing dataset files
             if os.path.exists(file_path):
-                os.remove(file_path)
+                os.remove(file_path)  # Remove old file
             if os.path.exists(new_dataset_filename):
-                os.remove(new_dataset_filename)
+                os.remove(new_dataset_filename)  # Remove renamed file
 
             # Move the dataset file
             # TODO: Fix this location "dataset_download_path"
-            # TODO: The .csv file must en up in resources folder
+            # TODO: The .csv file must end up in the resources folder
             shutil.move(dataset_download_path, os.getcwd())
 
-            # Rename the dataset file TODO: Delete this text "and delete any remains"
+            # Rename the dataset file
+            # TODO: Delete this text "and delete any remains"
             os.rename(file_path, new_dataset_filename)
 
         except Exception as e:
