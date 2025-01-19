@@ -266,8 +266,6 @@ class MainWindow:
         self.label.config(text="Separated genres into main genre and subgenre")
         print("Separated genres into main genre and subgenre")
 
-        self.button_separate_main_genre.config(state="disabled")
-
     def button_add_years_ago_column_action(self):
         self.check_if_dataframe_loaded()
         self.da.add_years_ago_column()

@@ -324,7 +324,6 @@ class DataAnalysis:
         print(self._df)
 
     def separate_genres(self):
-        # TODO: Found bug, if trying to use this method more than once, all subgenres become None
         self.check_if_dataframe_loaded()
 
         def split_genre(row):
@@ -335,7 +334,12 @@ class DataAnalysis:
             else:
                 return parts[0], None  # Only main genre
 
-        self._df[["genre", "subgenres"]] = self._df["genre"].apply(split_genre).apply(pd.Series)
+        # Check if the 'subgenres' column already exists
+        if 'subgenres' not in self._df.columns:
+            self._df[["genre", "subgenres"]] = self._df["genre"].apply(split_genre).apply(pd.Series)
+        else:
+            print("Genres already split between genre and subgenre column. Nothing to do.")
+
         print(self._df)
 
     def find_dataset_duration(self):
