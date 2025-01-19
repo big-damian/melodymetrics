@@ -409,9 +409,13 @@ class MainWindow:
         except DatasetNotLoadedException as e:
             print(f"Couldn't open plot window because dataframe hasn't been loaded yet \nException: {e}")
         else:
-            plot_window = PlotWindow(self.root)
-            plot_window.create_widgets()
-            plot_window.obtain_da_from_main_window(self.da)
+            try:
+                plot_window = PlotWindow(self.root)
+                plot_window.obtain_da_from_main_window(self.da)
+            except TypeError as e:
+                print(f"Couldn't open plot window because DataAnalysis object hasn't been loaded correctly \nException: {e}")
+            else:
+                plot_window.create_widgets()
 
     def update_dataframe_view(self, df=None, index=False):
         """

@@ -16,6 +16,7 @@ import tkinter as tk
 from tkinter import ttk
 
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from pandas import DataFrame
 
 
 class PlotWindow:
@@ -132,25 +133,12 @@ class PlotWindow:
         dataanalysis : DataAnalysis
             The DataAnalysis instance that holds the dataset and methods for creating plots.
         """
-        self.da = dataanalysis
-        # if isinstance(dataanalysis)
-        #     self.da = dataanalysis
-        # except DatasetNotLoadedException as e:
-        #     print(f"Error: {e}")
-        #     self.chart_window.quit()
 
-    # TODO: Delete this (tras usarlo como ejemplo o lo que sea)
-    # def create_chart(self):
-    #     """Create a sample chart to display."""
-    #     x = [1, 2, 3, 4, 5]
-    #     y = [2, 3, 5, 7, 11]
-    #     fig, ax = plt.subplots()
-    #     ax.plot(x, y, marker='o', linestyle='-', color='b', label='Sample Data')
-    #     ax.set_title('Sample Chart')
-    #     ax.set_xlabel('X-axis')
-    #     ax.set_ylabel('Y-axis')
-    #     ax.legend()
-    #     return fig
+        if isinstance(dataanalysis.df, DataFrame):
+            self.da = dataanalysis
+        else:
+            raise TypeError(
+                "The provided object must be a DataAnalysis object to the plot window for the data analysis.")
 
     def button_plot_most_frequent_genres_bar_action(self):
         """
