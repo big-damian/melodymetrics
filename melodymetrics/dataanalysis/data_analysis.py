@@ -841,7 +841,6 @@ class DataAnalysis:
 
         return fig
 
-
 # Example usage:
 # da = DataAnalysis(load_dataset=False)
 # da.find_dataset_csv()

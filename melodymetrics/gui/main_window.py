@@ -56,7 +56,7 @@ class MainWindow:
         # self.root.configure(bg="#F5F5F5")  # Set a background color
 
         # Define a style for ttk widgets
-        # TODO: Change this theme or leave it as is ('winnative', 'clam', 'alt', 'default', 'classic', 'vista', 'xpnative')
+        # TODO: Possibility to change this theme in the future ('winnative', 'clam', 'alt', 'default', 'classic', 'vista', 'xpnative')
         self.style = ttk.Style()
         self.style.theme_use('clam')
 
@@ -71,7 +71,7 @@ class MainWindow:
         # Other attributes
         self.da = None
         self.df = pd.DataFrame({"No dataframe loaded.": [
-            "No dataframe loaded."]})  # TODO: Maybe its possible to stop using this variable and use always the df from the da class
+            "No dataframe loaded."]})
 
         # Add widgets
         self.create_widgets()
