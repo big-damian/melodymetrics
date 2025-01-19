@@ -81,9 +81,10 @@ class MainWindow:
         Create and place the widgets (labels, buttons, frames) in the main window.
 
         The widgets are organized into different LabelFrames:
-        - First Steps: For downloading and loading datasets.
-        - Data Preprocessing: For data preprocessing tasks.
-        - EDA Actions: For exploratory data analysis tasks.
+        - First Steps: Containing buttons for downloading and loading datasets.
+        - Data Preprocessing: Containing buttons for data preprocessing tasks.
+        - EDA Actions: Containing buttons for exploratory data analysis tasks.
+        Under those, are a TreeView for the dataset to display and the console view to display console messages.
         """
         # Label
         self.label = ttk.Label(self.root, text="Welcome to MelodyMetrics!", font=("Arial", 14), anchor="center")
