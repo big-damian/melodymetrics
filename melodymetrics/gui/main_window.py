@@ -12,7 +12,7 @@ from melodymetrics.gui.plot_window import PlotWindow
 
 class MainWindow:
 
-    def __init__(self, title="MelodyMetrics by Damián Peña", width=900, height=700):
+    def __init__(self, title="MelodyMetrics by Damián Peña", width=850, height=780):
         # Initialize the main window
         self.root = tk.Tk()
         self.root.title(title)
@@ -22,7 +22,7 @@ class MainWindow:
         # Define a style for ttk widgets
         self.style = ttk.Style()
         self.style.theme_use('clam')  # Use a modern theme
-        self.style.configure('TButton', font=('Arial', 11), padding=5, background='#4CAF50', foreground='white')
+        self.style.configure('TButton', font=('Arial', 11), padding=3, background='#4CAF50', foreground='white')
         self.style.map('TButton', background=[('active', '#45A049')])
 
         # Other attributes
