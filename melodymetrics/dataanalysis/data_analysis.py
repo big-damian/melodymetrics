@@ -230,17 +230,20 @@ class DataAnalysis:
         # Check any outliers in year
         outlier_rows = self._df[(self._df["year"] > int(dt.date.today().year)) | (self._df["year"] < 1900)]
         outliers["year"] = outlier_rows
-        all_outliers.append(outlier_rows)
+        if not outlier_rows.empty:
+            all_outliers.append(outlier_rows)
 
         # Check any outliers in popularity
         outlier_rows = self._df[(self._df["popularity"] > 100) | (self._df["popularity"] < 0)]
         outliers["popularity"] = outlier_rows
-        all_outliers.append(outlier_rows)
+        if not outlier_rows.empty:
+            all_outliers.append(outlier_rows)
 
         # Check any outliers in genre
         outlier_rows = self._df[self._df["genre"] == "set()"]
         outliers["genre"] = outlier_rows
-        all_outliers.append(outlier_rows)
+        if not outlier_rows.empty:
+            all_outliers.append(outlier_rows)
 
         # Print the results for each column
         for column, outlier_rows in outliers.items():
@@ -259,9 +262,15 @@ class DataAnalysis:
             print(duplicate_rows)
 
         # Combine all outlier and duplicate rows into a single DataFrame (if any)
-        all_outliers_and_duplicates = all_outliers + [duplicate_rows] if not duplicate_rows.empty else all_outliers
+        all_outliers_and_duplicates = all_outliers.copy()  # Copy the outliers list
 
+        # Append duplicates if any
+        if not duplicate_rows.empty:
+            all_outliers_and_duplicates.append(duplicate_rows)
+
+        # Check if there are any outliers or duplicates to return
         if all_outliers_and_duplicates:
+            # Concatenate all outliers and duplicates into one DataFrame
             all_outliers_df = pd.concat(all_outliers_and_duplicates,
                                         ignore_index=False)  # Ignore index False to keep the original indices
             print("\nOutliers and duplicates across all columns:")
