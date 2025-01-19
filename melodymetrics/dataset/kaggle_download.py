@@ -59,31 +59,32 @@ class KaggleDownload:
             Prints the status of the dataset download process.
         """
 
-        print(f"Downloading dataset: {dataset_id}")
+        # Move to resources folder if not yet
+        if "melodymetrics\\resources" not in os.getcwd():
+            os.chdir('resources')
 
         try:
             # Download the dataset
+            print(f"Dataset ID: {dataset_id}")
             dataset_download_path = kagglehub.dataset_download('paradisejoy/top-hits-spotify-from-20002019',
-                                                               path='songs_normalize.csv', )
-            # print("Download complete!")
-
-            # Delete any existing dataset files
-            if os.path.exists(file_path):
-                os.remove(file_path)  # Remove old file
-            if os.path.exists(new_dataset_filename):
-                os.remove(new_dataset_filename)  # Remove renamed file
-
-            # Move the dataset file
-            # TODO: Fix this location "dataset_download_path"
-            # TODO: The .csv file must end up in the resources folder
-            shutil.move(dataset_download_path, os.getcwd())
-
-            # Rename the dataset file
-            # TODO: Delete this text "and delete any remains"
-            os.rename(file_path, new_dataset_filename)
+                                                               path='songs_normalize.csv', force_download=True)
+            print(f"Dataset successfully downloaded to: {dataset_download_path}")
 
         except Exception as e:
             print(f"Error downloading dataset: {e}")
 
         else:
-            print(f"Dataset downloaded to: {os.getcwd()}\\{new_dataset_filename}")
+            # Delete any existing dataset files
+            if os.path.exists(file_path):
+                os.remove(file_path)  # Remove old file (songs_normalize.csv)
+                print(f"Removed already existing dataset {file_path}")
+            if os.path.exists(new_dataset_filename):
+                os.remove(new_dataset_filename)  # Remove old renamed file (spotify_top_hits_2020.csv)
+                print(f"Removed already existing dataset {new_dataset_filename}")
+
+            # Move the dataset file from cache folder to resources
+            shutil.move(dataset_download_path, os.getcwd())
+
+            # Rename the dataset file
+            os.rename(file_path, new_dataset_filename)
+            print(f"Final dataset file: {os.getcwd()}\\{new_dataset_filename}")
