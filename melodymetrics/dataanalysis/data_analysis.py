@@ -840,27 +840,3 @@ class DataAnalysis:
             plt.show()
 
         return fig
-
-# Example usage:
-# da = DataAnalysis(load_dataset=False)
-# da.find_dataset_csv()
-# da.load_csv_dataset()
-# # da.check_num_null_values()
-# # da.check_any_null_values()
-# # da.check_num_unique_values()
-# # da.separate_genres()
-# # da.add_time_ago_column()
-# # da.find_dataset_duration()
-# # da.drop_duplicates()
-# print(da)
-# da.find_dataset_duration()
-# da.convert_duration_to_minutes()
-# print(da)
-# # da.plot_most_frequent_genres()
-#
-# da = DataAnalysis(load_dataset=False)
-# da.find_dataset_csv()
-# da.load_csv_dataset()
-# da.separate_genres()
-# print(da.df["genre"].unique())
-# print(da.df.info())
