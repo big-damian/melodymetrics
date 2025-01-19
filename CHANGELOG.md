@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+- ## [1.0.0] - 2025-01-19 - First final version
+  - Removed unnecessary TODO's
+  - Added button and functionality to go back to see the actual dataframe
+  - Fixed error when trying to load a dataset file when no file is in directories and added DatasetFileNotFoundException custom exception
+  - Fixed download kaggle dataset functionality
+  - Added all docstrings and comments
+  - Removed unused methods 'drop_duplicates' and 'clean_dataset'
+  - Fixed clean_outliers_and_duplicates method
+  - Fixed split genre bug, calling method more than once works now
+  - Cleaned code
+  - Refactored 'find outliers' button and method to 'clean outliers and duplicates' implementing said functionality
+  - New style for red color to plot window button
+  - Merged branch of LabelFrames redesign to 'master' (Added grouping to buttons and new layout)
+  - Updated the 'check outliers' method to check for outliers in 'year' and in 'popularity' columns
+  - Updated the 'check outliers' method to remove said outliers
+  - Updated plot window button layout and adjusted for same window size
+  - Implemented last plot explicit_songs_evolution (method and window button)
+  - Integrated top three genres over time into plot window
+  - Finished the code for the 'genre evolution over time' plot
+  - Fixed barpie plot not separating genres correctly
+  - Added index feature to dataframe display
+  - Added method of plot_window to receive the dataanalysis object from the main window
+  - Improved the check_if_dataframe_loaded method of main_window class
+  - Added buttons to plot window
+
 - ## [0.5.0] - 2025-01-11 - App looks pretty good. New window with bar of pie plot!
   - Added numpy to requirements.txt
   - Made a super cool Bar of pie chart for the most popular genre
