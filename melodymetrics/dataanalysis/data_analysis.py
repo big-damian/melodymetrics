@@ -221,9 +221,8 @@ class DataAnalysis:
             if print_preview:
                 print(self._df.head())
 
-            # TODO: Here I can enable the 'separate_genere' button again in case you load the dataframe again
-
             return self._df.head()
+
         except Exception as e:
             print(f"An error occurred: {e}")
             return f"An error occurred: {e}"
@@ -305,8 +304,7 @@ class DataAnalysis:
         """
         self.check_if_dataframe_loaded()
 
-        # TODO: Cambiar los comentarios y nombres de variable
-        # Create a DataFrame with the shape information (Rows and Columns as integers)
+        # Create a DataFrame with the shape information
         shape_info = {"Rows": str(self._df.shape[0]), "Columns": str(self._df.shape[1]), "|": "|"}
         shape_df = pd.DataFrame([shape_info])
 
@@ -314,17 +312,17 @@ class DataAnalysis:
         dtypes_df = pd.DataFrame(self._df.dtypes).reset_index()
         dtypes_df.columns = ["Column Name", "Dtype"]  # Renaming the columns for clarity
 
-        # Add the "|" column to dtypes_df and fill it with "|"
+        # Add the "|" column for a separator
         dtypes_df["|"] = "|"
 
         # Concatenate the shape_df with the dtypes_df
-        final_info_df = pd.concat([shape_df, dtypes_df], ignore_index=True)
+        result_info_df = pd.concat([shape_df, dtypes_df], ignore_index=True)
 
         # Replace any NaN values with an empty string
-        final_info_df = final_info_df.fillna("")
+        result_info_df = result_info_df.fillna("")
 
-        print(final_info_df)
-        return final_info_df
+        print(result_info_df)
+        return result_info_df
 
     def summarize_dataframe_statistics(self):
         """
