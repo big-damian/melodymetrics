@@ -204,7 +204,7 @@ class DataAnalysis:
         print(any_null_values_df)
         return any_null_values_df
 
-    def check_outliers_in_columns(self):
+    def clean_outliers_and_duplicates(self):
         # Ensure the DataFrame is loaded
         self.check_if_dataframe_loaded()
 
@@ -250,20 +250,31 @@ class DataAnalysis:
             else:
                 print(f"No outliers detected in column '{column}'.")
 
-        # Combine all outlier rows into a single DataFrame (if any)
-        if all_outliers:
-            all_outliers_df = pd.concat(all_outliers, ignore_index=False)  # Ignore index False to keep the original indices
-            print("\nOutliers across all columns:")
+        # Check for duplicates
+        duplicate_rows = self._df[self._df.duplicated()]
+
+        # Print duplicate rows if any
+        if not duplicate_rows.empty:
+            print("\nDuplicates detected:")
+            print(duplicate_rows)
+
+        # Combine all outlier and duplicate rows into a single DataFrame (if any)
+        all_outliers_and_duplicates = all_outliers + [duplicate_rows] if not duplicate_rows.empty else all_outliers
+
+        if all_outliers_and_duplicates:
+            all_outliers_df = pd.concat(all_outliers_and_duplicates,
+                                        ignore_index=False)  # Ignore index False to keep the original indices
+            print("\nOutliers and duplicates across all columns:")
             print(all_outliers_df)
 
-            # Drop the outlier rows from the original DataFrame using their indices
+            # Drop the outlier and duplicate rows from the original DataFrame using their indices
             self._df = self._df.drop(all_outliers_df.index).reset_index(drop=True)
-            print("\nThese outliers have been removed from the DataFrame.")
-            return all_outliers_df  # Return the DataFrame containing all outliers
+            print("\nThese outliers and duplicates have been removed from the DataFrame.")
+            return all_outliers_df  # Return the DataFrame containing all outliers and duplicates
         else:
-            print("\nNo outliers detected in any of the columns.")
-            return pd.DataFrame({"No outliers detected in any of the columns.": [
-                "No outliers detected in any of the columns."]})  # Return an empty DataFrame if no outliers were found
+            print("\nNo outliers or duplicates detected in any of the columns.")
+            return pd.DataFrame({"No outliers or duplicates detected in any of the columns.": [
+                "No outliers or duplicates detected in any of the columns."]})  # Return an empty DataFrame if no outliers or duplicates were found
 
     def check_num_unique_values(self):
         self.check_if_dataframe_loaded()

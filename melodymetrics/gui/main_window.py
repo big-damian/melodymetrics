@@ -64,14 +64,14 @@ class MainWindow:
         # Buttons in Data Preprocessing
         self.button_check_any_null = ttk.Button(self.data_preprocessing_frame, text="Check nulls in columns",
                                                 style="TButton", command=self.button_check_any_null_action)
-        self.button_find_outliers = ttk.Button(self.data_preprocessing_frame, text="Find any outliers",
-                                               style="TButton", command=self.button_find_outliers_action)
+        self.button_clean_outliers_duplicates = ttk.Button(self.data_preprocessing_frame, text="Clean outliers/duplicates",
+                                               style="TButton", command=self.button_clean_outliers_duplicates_action)
         self.button_separate_main_genre = ttk.Button(self.data_preprocessing_frame, text="Separate genres",
                                                      style="TButton", command=self.button_separate_main_genre_action)
         self.button_add_years_ago_column = ttk.Button(self.data_preprocessing_frame, text="Add years ago column",
                                                       style="TButton", command=self.button_add_years_ago_column_action)
         self.button_check_any_null.grid(row=0, column=0, padx=10, pady=5, sticky="nsew")
-        self.button_find_outliers.grid(row=0, column=1, padx=10, pady=5, sticky="nsew")
+        self.button_clean_outliers_duplicates.grid(row=0, column=1, padx=10, pady=5, sticky="nsew")
         self.button_separate_main_genre.grid(row=1, column=0, padx=10, pady=5, sticky="nsew")
         self.button_add_years_ago_column.grid(row=1, column=1, padx=10, pady=5, sticky="nsew")
 
@@ -239,14 +239,14 @@ class MainWindow:
         print("Checked for nulls in dataframe")
         print(f"Total null values in dataframe is {self.da.check_num_null_values()}")
 
-    def button_find_outliers_action(self):
+    def button_clean_outliers_duplicates_action(self):
         self.check_if_dataframe_loaded()
-        aux_df = self.da.check_outliers_in_columns()
+        aux_df = self.da.clean_outliers_and_duplicates()
 
         self.update_dataframe_view(aux_df, index=True)
 
-        self.label.config(text="Checking and deleting any outliers")
-        print("Checked outliers...")
+        self.label.config(text="Cleaning outliers and duplicates")
+        print("Cleaned outliers and duplicates...")
 
     def button_check_num_unique_values_action(self):
         self.check_if_dataframe_loaded()
