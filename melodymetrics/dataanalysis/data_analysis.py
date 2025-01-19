@@ -303,10 +303,6 @@ class DataAnalysis:
         print(unique_values_df)
         return unique_values_df
 
-    def drop_duplicates(self):
-        self.check_if_dataframe_loaded()
-        pass
-
     def add_years_ago_column(self):
         self.check_if_dataframe_loaded()
 
@@ -370,9 +366,6 @@ class DataAnalysis:
                 "-o-",
                 f"Duration: {duration} years"
             ]})
-
-    def clean_dataset(self):
-        pass
 
     def plot_most_frequent_genres(self, plt_show):
         self.check_if_dataframe_loaded()
