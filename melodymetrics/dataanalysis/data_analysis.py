@@ -1,3 +1,67 @@
+"""
+Music Dataset Analysis Module
+=============================
+
+This module provides a set of methods to analyze and visualize the dataset.
+It includes all functionalities: cleaning, transforming, and extracting plots.
+
+Classes and Methods
+-------------------
+The module primarily operates on a DataFrame loaded into the `_df` attribute of the class.
+To load the dataframe, there is a method called 'find_dataset_csv' and another called 'load_csv_dataset'
+that automate the process.
+Before using most methods, ensure that the DataFrame is properly loaded or exceptions will raise.
+
+Key Methods:
+    - `check_num_unique_values`: Check the number of unique values for each column.
+    - `drop_duplicates`: Remove duplicate rows from the dataset.
+    - `add_years_ago_column`: Add a column representing the number of years ago each entry occurred.
+    - `convert_duration_to_minutes`: Convert song duration from milliseconds to minutes.
+    - `separate_genres`: Split the genre column into main genres and subgenres.
+    - `find_dataset_duration`: Calculate the time span of the dataset based on years.
+    - `clean_dataset`: Perform dataset cleaning operations (method implementation pending).
+    - `plot_most_frequent_genres`: Generate a bar chart of the most frequent genres.
+    - `plot_most_frequent_genres_pie`: Create a pie chart and bar plot to show genre distribution.
+    - `plot_top_genres_evolution`: Plot the evolution of the top 3 genres over time.
+    - `plot_explicit_songs_evolution`: Plot the evolution of explicit songs over time.
+
+Usage
+-----
+1. Load a DataFrame into the `_df` attribute of the class using the setter method or 'load_csv_dataset'.
+2. Call the desired methods to analyze or transform the dataset.
+3. Use the plotting methods to generate visual insights.
+
+Dependencies
+------------
+This module relies on the following Python libraries:
+    - pandas (`pd`): Data manipulation and analysis.
+    - numpy (`np`): Numerical operations.
+    - matplotlib.pyplot (`plt`): Visualization.
+    - matplotlib.cm (`cm`): Color mapping for plots.
+    - datetime (`dt`): Date and time operations.
+    - matplotlib.patches.ConnectionPatch: For connecting pie and bar chart components.
+
+Example
+-------
+Below is an example of how to use this module:
+
+```python
+# Assume 'df' is a pandas DataFrame containing the music dataset.
+
+# Initialize the class with the dataset.
+analysis = MusicDatasetAnalyzer()
+analysis._df = df  # Load the DataFrame.
+
+# Check unique values in the dataset.
+unique_values_df = analysis.check_num_unique_values()
+
+# Add a 'years_ago' column.
+analysis.add_years_ago_column()
+
+# Plot the evolution of the top 3 genres.
+analysis.plot_top_genres_evolution(plt_show=True)
+"""
+
 import datetime as dt
 import os
 
@@ -11,12 +75,35 @@ from melodymetrics.exceptions import DatasetNotLoadedException
 
 
 class DataAnalysis:
+    """
+    The class for analyzing and visualizing the Spotify top hits dataset.
+
+    This class provides methods for cleaning, transforming, and visualizing music data in a pandas DataFrame. Key functionalities include:
+    - Data cleaning: Removing duplicates, adding time-based columns.
+    - Data transformation: Converting durations, separating genres.
+    - Analysis: Checking unique values, calculating dataset time span.
+    - Visualizations: Plotting genre distribution, top genres evolution, and explicit songs trends.
+
+    The dataset should be loaded into the '_df' attribute before use (through 'load_csv_dataset' or setter method).
+
+    Dependencies:
+    - pandas, numpy, matplotlib, datetime
+
+    Example usage:
+    - Load dataset with 'load_csv_dataset' or with setter method.
+    - Perform analysis and plotting (e.g., 'check_num_unique_values', 'plot_top_genres_evolution').
+    """
 
     def __init__(self, load_dataset=True, print_preview=False):
         """
-        Initialize the DataAnalysis class with the file name.
-        :load_dataset (bool): If True, the app will load the dataset csv file.
-        :print_preview (bool): If True and load_dataset True, the first five rows of the dataset will be printed.
+        Initialize the DataAnalysis class.
+
+        Parameters
+        ----------
+        load_dataset : bool, optional
+            If True, loads the dataset CSV file on initialization (default is True).
+        print_preview : bool, optional
+            If True, prints the first 5 rows of the dataset upon loading (default is False).
         """
         self.csv_path = None
         self._df = None
@@ -29,7 +116,14 @@ class DataAnalysis:
 
     @property
     def df(self):
-        """Getter method for the dataframe (df)."""
+        """
+        Get the dataframe.
+
+        Returns
+        -------
+        pd.DataFrame
+            The loaded dataset.
+        """
         try:
             self.check_if_dataframe_loaded()
         except DatasetNotLoadedException as e:
@@ -41,6 +135,14 @@ class DataAnalysis:
 
     @df.setter
     def df(self, new_df):
+        """
+        Set a new dataframe.
+
+        Parameters
+        ----------
+        new_df : pd.DataFrame
+            The new dataframe to set.
+        """
         if isinstance(new_df, pd.DataFrame):
             print(f"DataFrame has been replaced from {self._df.head(2)} to {new_df.head(2)}")
             self._df = new_df
@@ -52,17 +154,32 @@ class DataAnalysis:
 
     @df.deleter
     def df(self):
+        """
+        Delete the dataframe.
+        """
         print("DataFrame attribute has been removed.")
         self._df = None
 
     def __str__(self):
+        """
+        Return the string representation of the dataframe.
+
+        Returns
+        -------
+        str
+            The first 5 rows of the dataframe as a string.
+        """
         self.check_if_dataframe_loaded()
         return self._df.head().to_string()
 
     def find_dataset_csv(self):
         """
-        Finds the dataset CSV file in the project directory or its subdirectories.
-        :return: The path to the first CSV file, or None if no CSV file is found.
+        Find the dataset CSV file in the project directory.
+
+        Returns
+        -------
+        str or None
+            The path to the first CSV file found, or None if no CSV file is found.
         """
         project_directory = os.path.dirname(os.getcwd())
 
@@ -81,8 +198,17 @@ class DataAnalysis:
 
     def load_csv_dataset(self, print_preview=False):
         """
-        Loads the dataset CSV file to the df variable.
-        :return: The first 5 rows of the dataset or an error message if no CSV file is found.
+        Load the dataset CSV file into the dataframe.
+
+        Parameters
+        ----------
+        print_preview : bool, optional
+            If True, prints the first 5 rows of the dataset (default is False).
+
+        Returns
+        -------
+        pd.DataFrame or str
+            The first 5 rows of the dataframe or an error message.
         """
         try:
             # Construct the file path
@@ -103,6 +229,14 @@ class DataAnalysis:
             return f"An error occurred: {e}"
 
     def check_if_dataframe_loaded(self):
+        """
+        Check if the dataframe is loaded.
+
+        Raises
+        ------
+        DatasetNotLoadedException
+            If the dataframe is not loaded.
+        """
         if self._df is None:
             print("Error: No dataset loaded yet. Please load the dataset first")
             raise DatasetNotLoadedException
@@ -110,11 +244,13 @@ class DataAnalysis:
     @staticmethod
     def explain_dataframe_columns():
         """
-           Generate and display a hardcoded DataFrame describing/explaining the columns of the DataFrame that will be analyzed.
+        Generate and display a hardcoded dataframe describing the dataset columns.
 
-           Returns:
-               pandas.DataFrame: A DataFrame containing the attribute names and their explanations.
-           """
+        Returns
+        -------
+        pd.DataFrame
+            A dataframe containing column names and their descriptions.
+        """
         explanatory_dataframe = pd.DataFrame({
             "Attribute": [
                 "artist",
@@ -159,6 +295,14 @@ class DataAnalysis:
         return explanatory_dataframe
 
     def show_dataframe_info(self):
+        """
+        Display dataframe shape and column data types.
+
+        Returns
+        -------
+        pd.DataFrame
+            A dataframe showing rows, columns, and data types.
+        """
         self.check_if_dataframe_loaded()
 
         # TODO: Cambiar los comentarios y nombres de variable
@@ -183,6 +327,14 @@ class DataAnalysis:
         return final_info_df
 
     def summarize_dataframe_statistics(self):
+        """
+        Generate summary statistics for the dataframe.
+
+        Returns
+        -------
+        pd.DataFrame
+            A transposed dataframe of summary statistics.
+        """
         self.check_if_dataframe_loaded()
 
         # Prints summary statistics for all columns (numerical and categorical), transposes the DataFrame, and resets the index to display the statistics as columns.
@@ -190,12 +342,28 @@ class DataAnalysis:
         return self._df.describe(include="all").T.reset_index()
 
     def check_num_null_values(self):
+        """
+        Count the number of null values in the dataframe.
+
+        Returns
+        -------
+        int
+            Total number of null values in the dataframe.
+        """
         self.check_if_dataframe_loaded()
         num_null_values = self._df.isnull().values.sum()
         print(f"Total null values in dataframe: {num_null_values}")
         return num_null_values
 
     def check_any_null_values(self):
+        """
+        Check for null values in each dataframe column.
+
+        Returns
+        -------
+        pd.DataFrame
+            A dataframe showing whether each column has null values.
+        """
         self.check_if_dataframe_loaded()
         any_null_values_df = self._df.isnull().any().to_frame(
             name="Any null values in dataframe columns?").reset_index()
@@ -205,6 +373,15 @@ class DataAnalysis:
         return any_null_values_df
 
     def clean_outliers_and_duplicates(self):
+        """
+        Searches and cleans outliers and duplicate rows in the dataframe.
+
+        Returns
+        -------
+        pd.DataFrame
+            A dataframe containing outliers and duplicates, if any, or a dataframe
+            with a message indicating no outliers found.
+        """
         # Ensure the DataFrame is loaded
         self.check_if_dataframe_loaded()
 
@@ -286,6 +463,19 @@ class DataAnalysis:
                 "No outliers or duplicates detected in any of the columns."]})  # Return an empty DataFrame if no outliers or duplicates were found
 
     def check_num_unique_values(self):
+        """
+        Checks and displays the number of unique values in each column of the dataframe.
+
+        Returns
+        -------
+        pd.DataFrame
+            A dataframe containing column names and their respective count of unique values.
+
+        Raises
+        ------
+        ValueError
+            If the dataframe is not loaded.
+        """
         self.check_if_dataframe_loaded()
         unique_counts = []
 
@@ -304,6 +494,14 @@ class DataAnalysis:
         return unique_values_df
 
     def add_years_ago_column(self):
+        """
+        Adds a column to the object dataframe indicating the difference in years from the current year of the 'year' column.
+
+        Raises
+        ------
+        ValueError
+            If the dataframe is not loaded.
+        """
         self.check_if_dataframe_loaded()
 
         def get_years_ago(row):
@@ -319,6 +517,14 @@ class DataAnalysis:
         print(self._df)
 
     def convert_duration_to_minutes(self):
+        """
+        Converts the 'duration_ms' column from milliseconds to minutes and renames it to 'duration_minutes'.
+
+        Raises
+        ------
+        ValueError
+            If the dataframe is not loaded.
+        """
         self.check_if_dataframe_loaded()
 
         # Convert milliseconds to seconds and apply lambda to return the float with one decimal
@@ -329,6 +535,14 @@ class DataAnalysis:
         print(self._df)
 
     def separate_genres(self):
+        """
+        Splits the 'genre' column into 'genre' and 'subgenres' columns.
+
+        Raises
+        ------
+        ValueError
+            If the dataframe is not loaded.
+        """
         self.check_if_dataframe_loaded()
 
         def split_genre(row):
@@ -348,6 +562,19 @@ class DataAnalysis:
         print(self._df)
 
     def find_dataset_duration(self):
+        """
+        Calculates and displays the duration of the dataset in terms of years.
+
+        Returns
+        -------
+        pd.DataFrame
+            A dataframe containing the start year, end year, and duration.
+
+        Raises
+        ------
+        ValueError
+            If the dataframe is not loaded.
+        """
         self.check_if_dataframe_loaded()
 
         # Extract the start and end dates
@@ -368,6 +595,24 @@ class DataAnalysis:
             ]})
 
     def plot_most_frequent_genres(self, plt_show):
+        """
+        Plots a bar chart of the most popular genres.
+
+        Parameters
+        ----------
+        plt_show : bool
+            Whether to display the plot for text use.
+
+        Returns
+        -------
+        matplotlib.figure.Figure
+            The figure object containing the plot for the graphic interface.
+
+        Raises
+        ------
+        ValueError
+            If the dataframe is not loaded.
+        """
         self.check_if_dataframe_loaded()
 
         # Separate genres again, in case they haven't been separated before
@@ -389,6 +634,24 @@ class DataAnalysis:
         return fig  # Return the figure object
 
     def plot_most_frequent_genres_pie(self, plt_show):
+        """
+        Plots a pie chart of the most popular/frequent genres with a breakdown of less popular genres.
+
+        Parameters
+        ----------
+        plt_show : bool
+            Whether to display the plot for text use.
+
+        Returns
+        -------
+        matplotlib.figure.Figure
+            The figure object containing the plot for the graphic interface.
+
+        Raises
+        ------
+        ValueError
+            If the dataframe is not loaded.
+        """
         self.check_if_dataframe_loaded()
 
         # Separate genres and count their occurrences keeping only the main genre
@@ -473,7 +736,20 @@ class DataAnalysis:
 
         return fig  # Return the figure object
 
-    def plot_top_genres_evolution(self, plt_show=True):
+    def plot_top_genres_evolution(self, plt_show):
+        """
+        Plot the evolution of the top 3 most frequent genres over time.
+
+        Parameters
+        ----------
+        plt_show : bool
+            Whether to display the plot for text use.
+
+        Returns
+        -------
+        matplotlib.figure.Figure
+            The figure object containing the plot for the graphic interface.
+        """
         self.check_if_dataframe_loaded()
 
         # Prepare data for plotting
@@ -516,7 +792,20 @@ class DataAnalysis:
 
         return fig
 
-    def plot_explicit_songs_evolution(self, plt_show=True):
+    def plot_explicit_songs_evolution(self, plt_show):
+        """
+        Plot the evolution of the number of explicit songs over time.
+
+        Parameters
+        ----------
+        plt_show : bool
+            Whether to display the plot for text use.
+
+        Returns
+        -------
+        matplotlib.figure.Figure
+            The figure object containing the plot for the graphic interface.
+        """
         # Ensure dataframe is loaded
         self.check_if_dataframe_loaded()
 
