@@ -12,7 +12,7 @@ from melodymetrics.gui.plot_window import PlotWindow
 
 class MainWindow:
 
-    def __init__(self, title="MelodyMetrics by Damián Peña", width=900, height=700):
+    def __init__(self, title="MelodyMetrics by Damián Peña", width=850, height=780):
         # Initialize the main window
         self.root = tk.Tk()
         self.root.title(title)
@@ -20,10 +20,10 @@ class MainWindow:
         # self.root.configure(bg="#F5F5F5")  # Set a background color
 
         # Define a style for ttk widgets
+        # TODO: Change this theme or leave it as is
         self.style = ttk.Style()
         self.style.theme_use('clam')  # Use a modern theme
-        # TODO: Change this theme or leave it as is
-        self.style.configure('TButton', font=('Arial', 12), padding=10, background='#4CAF50', foreground='white')
+        self.style.configure('TButton', font=('Arial', 11), padding=3, background='#4CAF50', foreground='white')
         self.style.map('TButton', background=[('active', '#45A049')])
 
         # Other attributes
@@ -36,72 +36,97 @@ class MainWindow:
 
     def create_widgets(self):
         # Label
-        self.label = ttk.Label(self.root, text="Welcome to MelodyMetrics!\nSelect", font=("Arial", 14))
-        self.label.grid(row=0, column=0, columnspan=4, pady=(10, 30))
+        self.label = ttk.Label(self.root, text="Welcome to MelodyMetrics!", font=("Arial", 14), anchor="center")
+        self.label.grid(row=0, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
 
-        # Left-aligned label inside the LabelFrame
-        self.label_info = ttk.Label(self.root, text="EDA Actions (Exploratory Data Analysis):", anchor="sw")
-        self.label_info.grid(row=1, column=0, columnspan=4, padx=10, pady=(40, 0), sticky="w")  # Left-align with sticky="w"
+        # First Steps LabelFrame
+        self.first_steps_frame = ttk.LabelFrame(self.root, text="First steps:", padding=(10, 10))
+        self.first_steps_frame.grid(row=1, column=0, columnspan=2, padx=10, pady=5, sticky="nsew")
 
-        # Buttons
-        self.button_download_dataframe = ttk.Button(self.root, text="Download Kaggle dataframe", style="TButton",
-                                                    command=self.button_download_dataframe_action)
-        self.button_load_dataframe = ttk.Button(self.root, text="Load dataframe", style="TButton",
-                                                command=self.button_load_dataframe_action)
-        self.button_describe_columns = ttk.Button(self.root, text="Describe dataframe columns", style="TButton",
-                                                  command=self.button_describe_columns_action)
-        self.button_show_df_info = ttk.Button(self.root, text="Show df shape and info", style="TButton",
-                                                  command=self.button_show_df_info_action)
-        self.button_show_dataframe_statistics = ttk.Button(self.root, text="Show dataframe statistics", style="TButton",
+        # Buttons in First Steps
+        self.button_download_dataframe = ttk.Button(self.first_steps_frame, text="Download Kaggle dataframe",
+                                                    style="TButton", command=self.button_download_dataframe_action)
+        self.button_load_dataframe = ttk.Button(self.first_steps_frame, text="Load dataframe",
+                                                style="TButton", command=self.button_load_dataframe_action)
+        self.button_download_dataframe.grid(row=0, column=0, padx=10, pady=5, sticky="ew")
+        self.button_load_dataframe.grid(row=0, column=1, padx=10, pady=5, sticky="ew")
+
+        # Data Preprocessing LabelFrame
+        self.data_preprocessing_frame = ttk.LabelFrame(self.root, text="Data preprocessing:", padding=(10, 10))
+        self.data_preprocessing_frame.grid(row=1, column=2, columnspan=2, padx=10, pady=5, sticky="nsew")
+
+        # Buttons in Data Preprocessing
+        self.button_check_any_null = ttk.Button(self.data_preprocessing_frame, text="Check nulls in columns",
+                                                style="TButton", command=self.button_check_any_null_action)
+        self.button_find_outliers = ttk.Button(self.data_preprocessing_frame, text="Find any outliers",
+                                               style="TButton", command=self.button_find_outliers_action)
+        self.button_separate_main_genre = ttk.Button(self.data_preprocessing_frame, text="Separate genres",
+                                                     style="TButton", command=self.button_separate_main_genre_action)
+        self.button_add_years_ago_column = ttk.Button(self.data_preprocessing_frame, text="Add years ago column",
+                                                      style="TButton", command=self.button_add_years_ago_column_action)
+        self.button_check_any_null.grid(row=0, column=0, padx=10, pady=5, sticky="nsew")
+        self.button_find_outliers.grid(row=0, column=1, padx=10, pady=5, sticky="nsew")
+        self.button_separate_main_genre.grid(row=1, column=0, padx=10, pady=5, sticky="nsew")
+        self.button_add_years_ago_column.grid(row=1, column=1, padx=10, pady=5, sticky="nsew")
+
+        # EDA Actions LabelFrame
+        self.eda_actions_frame = ttk.LabelFrame(self.root, text="EDA Actions (Exploratory Data Analysis)",
+                                                padding=(10, 10))
+        self.eda_actions_frame.grid(row=2, column=0, columnspan=4, padx=10, pady=5, sticky="nsew")
+
+        # Buttons in EDA Actions
+        self.button_describe_columns = ttk.Button(self.eda_actions_frame, text="Describe dataframe columns",
+                                                  style="TButton", command=self.button_describe_columns_action)
+        self.button_show_df_info = ttk.Button(self.eda_actions_frame, text="Show df shape and info",
+                                              style="TButton", command=self.button_show_df_info_action)
+        self.button_show_dataframe_statistics = ttk.Button(self.eda_actions_frame, text="Show dataframe statistics",
+                                                           style="TButton",
                                                            command=self.button_show_dataframe_statistics_action)
-        self.button_find_dataset_duration = ttk.Button(self.root, text="Show dataframe duration", style="TButton",
+        self.button_find_dataset_duration = ttk.Button(self.eda_actions_frame, text="Show dataframe duration",
+                                                       style="TButton",
                                                        command=self.button_find_dataset_duration_action)
-        self.button_find_outliers = ttk.Button(self.root, text="Find any outliers", style="TButton",
-                                                       command=self.button_find_outliers_action)
-        self.button_check_any_null = ttk.Button(self.root, text="Check nulls in columns", style="TButton",
-                                                command=self.button_check_any_null_action)
-        self.button_check_num_unique_values = ttk.Button(self.root, text="Check number of unique values",
+        self.button_check_num_unique_values = ttk.Button(self.eda_actions_frame,
+                                                         text="Check number of unique values",
                                                          style="TButton",
                                                          command=self.button_check_num_unique_values_action)
-        self.button_separate_main_genre = ttk.Button(self.root, text="Separate genres", style="TButton",
-                                                     command=self.button_separate_main_genre_action)
-        self.button_add_years_ago_column = ttk.Button(self.root, text="Add years ago column", style="TButton",
-                                                      command=self.button_add_years_ago_column_action)
-        self.button_open_plot_window = ttk.Button(self.root, text="Open plot visualization window", style="TButton",
-                                                  command=self.button_open_plot_window_action)
-        # TODO: Add search row function
+        self.button_open_plot_window = ttk.Button(self.eda_actions_frame, text="Open plot visualization window",
+                                                  style="TButton", command=self.button_open_plot_window_action)
+        self.button_describe_columns.grid(row=0, column=0, padx=10, pady=5, sticky="nsew")
+        self.button_show_df_info.grid(row=0, column=1, padx=10, pady=5, sticky="nsew")
+        self.button_show_dataframe_statistics.grid(row=1, column=0, padx=10, pady=5, sticky="nsew")
+        self.button_find_dataset_duration.grid(row=1, column=1, padx=10, pady=5, sticky="nsew")
+        self.button_check_num_unique_values.grid(row=2, column=0, padx=10, pady=5, sticky="nsew")
+        self.button_open_plot_window.grid(row=2, column=1, padx=10, pady=5, sticky="nsew")
 
-        self.button_download_dataframe.grid(row=2, column=0, padx=10, pady=5, sticky="ew")
-        self.button_load_dataframe.grid(row=2, column=1, padx=10, pady=5, sticky="ew")
-        self.button_describe_columns.grid(row=2, column=2, padx=10, pady=5, sticky="ew")
-        self.button_show_df_info.grid(row=2, column=3, padx=10, pady=5, sticky="ew")
-        self.button_show_dataframe_statistics.grid(row=3, column=0, padx=10, pady=5, sticky="ew")
-        self.button_find_dataset_duration.grid(row=3, column=2, padx=10, pady=5, sticky="ew")
-        self.button_find_outliers.grid(row=3, column=3, padx=10, pady=5, sticky="ew")
-        self.button_check_any_null.grid(row=4, column=0, padx=10, pady=5, sticky="ew")
-        self.button_check_num_unique_values.grid(row=4, column=1, padx=10, pady=5, sticky="ew")
-        self.button_separate_main_genre.grid(row=4, column=2, padx=10, pady=5, sticky="ew")
-        self.button_add_years_ago_column.grid(row=4, column=3, padx=10, pady=5, sticky="ew")
-        self.button_open_plot_window.grid(row=5, column=1, columnspan=2, padx=10, pady=5, sticky="ew")
-
-        # Adding weight to rows and columns
+        # Adding weights to rows and columns
         self.root.grid_rowconfigure(0, weight=1)
         self.root.grid_rowconfigure(1, weight=1)
         self.root.grid_rowconfigure(2, weight=1)
-        self.root.grid_rowconfigure(3, weight=1)
-        self.root.grid_rowconfigure(4, weight=1)
-        self.root.grid_rowconfigure(5, weight=1)
-        self.root.grid_rowconfigure(6, weight=1)
-        self.root.grid_rowconfigure(7, weight=1)
+        self.root.grid_rowconfigure(3, weight=20)
+        self.root.grid_rowconfigure(4, weight=12)
         self.root.grid_columnconfigure(0, weight=1)
         self.root.grid_columnconfigure(1, weight=1)
         self.root.grid_columnconfigure(2, weight=1)
         self.root.grid_columnconfigure(3, weight=1)
 
-        # TODO: Add index to the dataframe viewer
+        self.first_steps_frame.grid_rowconfigure(0, weight=1)
+        self.first_steps_frame.grid_columnconfigure(0, weight=1)
+        self.first_steps_frame.grid_columnconfigure(1, weight=1)
+
+        self.data_preprocessing_frame.grid_rowconfigure(0, weight=1)
+        self.data_preprocessing_frame.grid_rowconfigure(1, weight=1)
+        self.data_preprocessing_frame.grid_columnconfigure(0, weight=1)
+        self.data_preprocessing_frame.grid_columnconfigure(1, weight=1)
+
+        self.eda_actions_frame.grid_rowconfigure(0, weight=1)
+        self.eda_actions_frame.grid_rowconfigure(1, weight=1)
+        self.eda_actions_frame.grid_rowconfigure(2, weight=1)
+        self.eda_actions_frame.grid_columnconfigure(0, weight=1)
+        self.eda_actions_frame.grid_columnconfigure(1, weight=1)
+
         # Dataset frame
         self.frame = ttk.Frame(self.root)
-        self.frame.grid(row=7, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
+        self.frame.grid(row=3, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
 
         # Treeview for the dataframe
         self.tree = ttk.Treeview(self.frame, columns=list(self.df.columns), show="headings")
@@ -119,13 +144,13 @@ class MainWindow:
         self.frame.grid_rowconfigure(0, weight=1)
         self.frame.grid_columnconfigure(0, weight=1)
 
-        # Populate treeview with placeholder data
+        # Populate treeview with placeholder text
         self.update_dataframe_view()
 
         # Console output
         self.console_output = tk.Text(self.root, wrap="word", height=10)
         self.console_output.bind("<Key>", "break")  # Disable writing in the text field
-        self.console_output.grid(row=8, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
+        self.console_output.grid(row=4, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
 
         # Redirect stdout to the console output
         sys.stdout = RedirectOutput(self.console_output)
