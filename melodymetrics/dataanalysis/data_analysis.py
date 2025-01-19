@@ -71,7 +71,7 @@ from matplotlib import cm
 from matplotlib import pyplot as plt
 from matplotlib.patches import ConnectionPatch
 
-from melodymetrics.exceptions import DatasetNotLoadedException
+from melodymetrics.exceptions import DatasetNotLoadedException, DatasetFileNotFoundException
 
 
 class DataAnalysis:
@@ -193,8 +193,8 @@ class DataAnalysis:
                     self.csv_path = os.path.join(root, file)
                     print(f"Found dataset csv at {self.csv_path}")
                     return self.csv_path
-        print("No csv file found in project folder")
-        return None
+        print("No csv file found in melodymetrics folder")
+        raise DatasetFileNotFoundException
 
     def load_csv_dataset(self, print_preview=False):
         """
@@ -223,9 +223,9 @@ class DataAnalysis:
 
             return self._df.head()
 
-        except Exception as e:
-            print(f"An error occurred: {e}")
-            return f"An error occurred: {e}"
+        except DatasetFileNotFoundException as e:
+            print(f"Error: {e}")
+            return f"Error: {e}"
 
     def check_if_dataframe_loaded(self):
         """
@@ -843,25 +843,25 @@ class DataAnalysis:
 
 
 # Example usage:
-da = DataAnalysis(load_dataset=False)
-da.find_dataset_csv()
-da.load_csv_dataset()
-# da.check_num_null_values()
-# da.check_any_null_values()
-# da.check_num_unique_values()
-# da.separate_genres()
-# da.add_time_ago_column()
+# da = DataAnalysis(load_dataset=False)
+# da.find_dataset_csv()
+# da.load_csv_dataset()
+# # da.check_num_null_values()
+# # da.check_any_null_values()
+# # da.check_num_unique_values()
+# # da.separate_genres()
+# # da.add_time_ago_column()
+# # da.find_dataset_duration()
+# # da.drop_duplicates()
+# print(da)
 # da.find_dataset_duration()
-# da.drop_duplicates()
-print(da)
-da.find_dataset_duration()
-da.convert_duration_to_minutes()
-print(da)
-# da.plot_most_frequent_genres()
-
-da = DataAnalysis(load_dataset=False)
-da.find_dataset_csv()
-da.load_csv_dataset()
-da.separate_genres()
-print(da.df["genre"].unique())
-print(da.df.info())
+# da.convert_duration_to_minutes()
+# print(da)
+# # da.plot_most_frequent_genres()
+#
+# da = DataAnalysis(load_dataset=False)
+# da.find_dataset_csv()
+# da.load_csv_dataset()
+# da.separate_genres()
+# print(da.df["genre"].unique())
+# print(da.df.info())

@@ -17,7 +17,7 @@ import pandas as pd
 
 from melodymetrics.dataanalysis.data_analysis import DataAnalysis
 from melodymetrics.dataset.kaggle_download import KaggleDownload
-from melodymetrics.exceptions import DatasetNotLoadedException
+from melodymetrics.exceptions import DatasetNotLoadedException, DatasetFileNotFoundException
 from melodymetrics.gui.plot_window import PlotWindow
 
 
@@ -96,7 +96,7 @@ class MainWindow:
         # Buttons in First Steps
         self.button_download_dataframe = ttk.Button(self.first_steps_frame, text="Download Kaggle dataframe",
                                                     style="TButton", command=self.button_download_dataframe_action)
-        self.button_load_dataframe = ttk.Button(self.first_steps_frame, text="Load dataframe",
+        self.button_load_dataframe = ttk.Button(self.first_steps_frame, text="Load dataframe .csv",
                                                 style="TButton", command=self.button_load_dataframe_action)
         self.button_download_dataframe.grid(row=0, column=0, padx=10, pady=5, sticky="ew")
         self.button_load_dataframe.grid(row=0, column=1, padx=10, pady=5, sticky="ew")
@@ -256,12 +256,22 @@ class MainWindow:
         self.label.config(text="Loading dataset...")
         print("Loading dataset...")
 
-        self.da = DataAnalysis(load_dataset=True)
-        self.load_dataframe_from_analysis()
-        self.df = self.df.sort_values(by="popularity", ascending=False)
+        try:
+            # Create  DataAnalysis and try to find dataset file
+            self.da = DataAnalysis(load_dataset=False)
+            self.da.find_dataset_csv()
 
-        self.update_dataframe_view(index=True)
-        print("Finished loading dataset into dataframe (sorted by most popular).")
+        except DatasetFileNotFoundException as e:
+            print(f"Error: {e}")
+            return f"Error: {e}"
+
+        else:
+            self.da.load_csv_dataset()
+            self.load_dataframe_from_analysis()
+            self.df = self.df.sort_values(by="popularity", ascending=False)
+
+            self.update_dataframe_view(index=True)
+            print("Finished loading dataset into dataframe (sorted by most popular).")
 
     def button_describe_columns_action(self):
         """
