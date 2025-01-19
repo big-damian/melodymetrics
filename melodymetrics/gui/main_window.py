@@ -20,6 +20,7 @@ class MainWindow:
         # self.root.configure(bg="#F5F5F5")  # Set a background color
 
         # Define a style for ttk widgets
+        # TODO: Change this theme or leave it as is
         self.style = ttk.Style()
         self.style.theme_use('clam')  # Use a modern theme
         self.style.configure('TButton', font=('Arial', 11), padding=3, background='#4CAF50', foreground='white')
