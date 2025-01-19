@@ -195,7 +195,7 @@ class DataAnalysis:
         print(f"Total null values in dataframe: {num_null_values}")
         return num_null_values
 
-    def check_any_null_values(self, return_df=False):
+    def check_any_null_values(self):
         self.check_if_dataframe_loaded()
         any_null_values_df = self._df.isnull().any().to_frame(
             name="Any null values in dataframe columns?").reset_index()
