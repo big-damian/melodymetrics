@@ -60,12 +60,12 @@ class KaggleDownload:
         """
 
         # Ensure the path exists and move to the 'resources' folder
-        resources_path = os.path.join(os.getcwd(), 'melodymetrics', 'resources')
+        resources_path = os.path.join(os.getcwd(), 'resources')
 
         if os.path.exists(resources_path):
             # Move to resources folder if not yet
             if "melodymetrics\\resources" not in os.getcwd():
-                os.chdir(resources_path)
+                os.chdir("resources")
 
         try:
             # Download the dataset
