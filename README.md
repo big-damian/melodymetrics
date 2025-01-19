@@ -1,6 +1,8 @@
 MelodyMetrics
 -------------
-![alt text](https://badgen.net/badge/python/3.10.11/cyan?icon=pypi)
+![Python](https://badgen.net/badge/python/3.10.11/cyan?icon=pypi)
+![Version](https://img.shields.io/github/v/release/big-damian/melodymetrics)
+![License](https://img.shields.io/badge/license-CC%20BY--NC--SA%204.0-lightgrey)
 <br>
 <br>
 MelodyMetrics is a user-friendly, interactive tool designed to analyse dataset data in a very simple and visual way 
@@ -10,7 +12,6 @@ functions, as well as chart to extract data conclusions. It allows users
 to easily visualize, clean, and prepare datasets for further analysis.
 
 ## Features
-
 - First Steps:
   - Download Kaggle Dataframe: Quickly download datasets from Kaggle for analysis.
   - Load Dataframe: Load existing datasets into the application to begin exploration.
@@ -35,6 +36,28 @@ to easily visualize, clean, and prepare datasets for further analysis.
   - Resizable Layout that adapts to different screen sizes, ensuring that the interface remains usable even when the window is maximized.
   - A TreeView that displays the actual dataframe as table.
   - A console view to get detailed information of what is happening in the background
+
+## Installation
+First, download the latest wheel (`.whl`) file and install it with:
+
+  ```bash
+  pip install melodymetrics-X.X.X-py3-none-any.whl
+  ```
+
+- Option 1: Write this in a Python script:
+
+  ```python
+  from melodymetrics import main as melodymetrics
+  melodymetrics.main()
+  ```
+
+- Option 2: Locate the installed package and open a terminal.
+
+  Locate yourself in the `melodymetrics` directory and type in the terminal:
+
+  ```bash
+  python melodymetrics/main.py
+  ```
 
 ## UML Diagram
 ![UML Diagram](melodymetrics/resources/uml/uml.jpg)
