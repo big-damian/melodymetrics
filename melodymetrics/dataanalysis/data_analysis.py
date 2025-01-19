@@ -185,8 +185,10 @@ class DataAnalysis:
 
         # Cycle through the different directories and files
         for root, _, files in os.walk(project_directory):
+            if "melodymetrics" not in root:
+                continue
             # Skip .venv .git and .idea directories
-            if "melodymetrics\\." in root:
+            elif "melodymetrics\\." in root:
                 continue
             for file in files:
                 if file.endswith(".csv"):
