@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+- ## [1.0.3] - 2025-01-19 - First final version
+  - Added UML to README.md 
+  - Added UML and Dataset Excel file to git
+  - Patched kaggle_download.py to download to resources if exists
+
+- ## [1.0.2] - 2025-01-19 - First final version
+  - Fixed dataset_download and find_dataset_csv to download and read from anywhere
+    - Added regex to identify file in directories
+
+- ## [1.0.1] - 2025-01-19 - First final version
+  - Fixed find_dataset_csv method to search in melodymetrics directory
+  - Redacted basic version of README.md
+  - Removed example code from data_analysis.py
+
 - ## [1.0.0] - 2025-01-19 - First final version
   - Removed unnecessary TODO's
   - Added button and functionality to go back to see the actual dataframe

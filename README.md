@@ -36,6 +36,9 @@ to easily visualize, clean, and prepare datasets for further analysis.
   - A TreeView that displays the actual dataframe as table.
   - A console view to get detailed information of what is happening in the background
 
+## UML Diagram
+![UML Diagram](melodymetrics/resources/uml/uml.jpg)
+
 ## Requirements
   - Python 3.10.11 or greater
   - tkinter for the graphical user interface (GUI)
