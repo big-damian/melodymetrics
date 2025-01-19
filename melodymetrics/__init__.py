@@ -7,6 +7,6 @@ top Spotify music metrics.
 
 __author__ = "Damian Peña"
 __email__ = "damian.example@email.com"
-__version__ = "1.0.2"
+__version__ = "1.0.3"
 
 PACKAGE_NAME = "melodymetrics"
