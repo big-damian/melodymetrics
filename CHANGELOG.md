@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Fixed dataset_download and find_dataset_csv to download and read from anywhere
     - Added regex to identify file in directories
 
-- ## [1.0.1] - 2025-01-19 - First final version
+- ## [1.0.1] - 2025-01-19 - First final version patched find dataset method
   - Fixed find_dataset_csv method to search in melodymetrics directory
   - Redacted basic version of README.md
   - Removed example code from data_analysis.py
