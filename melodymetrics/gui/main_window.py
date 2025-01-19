@@ -286,7 +286,9 @@ class MainWindow:
         """
         self.check_if_dataframe_loaded()
 
-        self.update_dataframe_view(self.df)
+        self.load_dataframe_from_analysis()
+
+        self.update_dataframe_view(self.df, index=True)
 
         self.label.config(text="Actual dataframe:")
         print("Showing actual dataframe:")
