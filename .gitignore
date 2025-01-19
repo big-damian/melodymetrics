@@ -1,6 +1,5 @@
 *.csv
 *.whl
 *.mytxt
-*.xlsx
 .eggs
 dist
