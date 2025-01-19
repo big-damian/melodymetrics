@@ -64,6 +64,7 @@ analysis.plot_top_genres_evolution(plt_show=True)
 
 import datetime as dt
 import os
+import re
 
 import numpy as np
 import pandas as pd
@@ -185,13 +186,8 @@ class DataAnalysis:
 
         # Cycle through the different directories and files
         for root, _, files in os.walk(project_directory):
-            if "melodymetrics" not in root:
-                continue
-            # Skip .venv .git and .idea directories
-            elif "melodymetrics\\." in root:
-                continue
             for file in files:
-                if file.endswith(".csv"):
+                if re.match(r"spotify_top_hits_2020\.csv$", file):
                     self.csv_path = os.path.join(root, file)
                     print(f"Found dataset csv at {self.csv_path}")
                     return self.csv_path
