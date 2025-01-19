@@ -58,6 +58,16 @@ First, download the latest wheel (`.whl`) file and install it with:
   ```bash
   python melodymetrics/main.py
   ```
+Additionally you can use this provided Python notebook in Google Colab. Just upload the wheel .whl file and run the code of the notebook file to see the main data analysis features:
+<br>
+![Python data analysis notebook](melodymetrics/resources/MelodyMetrics_DataAnalysis_example_usage_notebook.ipynb)
+
+## How to use the app
+Once the application is launched, you will see a main window with the following sections:
+  - First Steps: Start by downloading or loading a dataset.
+  - Data Preprocessing: Clean and preprocess the dataset by checking for null values, unique values, and adding new features.
+  - EDA Actions: Perform exploratory analysis on the dataset, including statistical summaries, detecting outliers, and more.
+  - Plot visualisation: Open the plot window and click the buttons to see the charts over the processed data
 
 ## UML Diagram
 ![UML Diagram](melodymetrics/resources/uml/uml.jpg)
@@ -69,13 +79,6 @@ First, download the latest wheel (`.whl`) file and install it with:
   - kagglehub to download the dataframe automatically
   - matplotlib for data visualization
   - numpy for calculations
-
-## Usage
-Once the application is launched, you will see a main window with the following sections:
-  - First Steps: Start by downloading or loading a dataset.
-  - Data Preprocessing: Clean and preprocess the dataset by checking for null values, unique values, and adding new features.
-  - EDA Actions: Perform exploratory analysis on the dataset, including statistical summaries, detecting outliers, and more.
-  - Plot visualisation: Open the plot window and click the buttons to see the charts over the processed data
 
 Each button performs a specific task within these sections, allowing you to interactively explore and prepare your dataset for further analysis.
 
