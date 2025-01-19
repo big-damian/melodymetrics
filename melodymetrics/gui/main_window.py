@@ -123,10 +123,9 @@ class MainWindow:
         self.eda_actions_frame.grid_columnconfigure(0, weight=1)
         self.eda_actions_frame.grid_columnconfigure(1, weight=1)
 
-        # TODO: Add index to the dataframe viewer
         # Dataset frame
         self.frame = ttk.Frame(self.root)
-        self.frame.grid(row=6, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
+        self.frame.grid(row=3, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
 
         # Treeview for the dataframe
         self.tree = ttk.Treeview(self.frame, columns=list(self.df.columns), show="headings")
@@ -144,13 +143,13 @@ class MainWindow:
         self.frame.grid_rowconfigure(0, weight=1)
         self.frame.grid_columnconfigure(0, weight=1)
 
-        # Populate treeview with placeholder data
+        # Populate treeview with placeholder text
         self.update_dataframe_view()
 
         # Console output
         self.console_output = tk.Text(self.root, wrap="word", height=10)
         self.console_output.bind("<Key>", "break")  # Disable writing in the text field
-        self.console_output.grid(row=7, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
+        self.console_output.grid(row=4, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
 
         # Redirect stdout to the console output
         sys.stdout = RedirectOutput(self.console_output)
