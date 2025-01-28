@@ -74,7 +74,7 @@ Once the application is launched, you will see a main window with the following 
   - Plot visualisation: Open the plot window and click the buttons to see the charts over the processed data
 
 ## UML Diagram
-![UML Diagram](./melodymetrics/resources/uml/uml.jpg)
+![UML Diagram](resources/uml/uml.jpg)
 
 ## Requirements
   - Python 3.10.11 or greater
