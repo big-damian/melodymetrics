@@ -11,6 +11,10 @@ preprocessing music-related datasets. The app provides a range of Exploratory Da
 functions, as well as chart to extract data conclusions. It allows users
 to easily visualize, clean, and prepare datasets for further analysis.
 
+|                            Main app window                             |                       Plot visualization window                        |
+|:----------------------------------------------------------------------:|:----------------------------------------------------------------------:|
+| ![Main window](melodymetrics/resources/img/main_window_screenshot.png) | ![Plot window](melodymetrics/resources/img/plot_window_screenshot.png) |
+
 ## Features
 - First Steps:
   - Download Kaggle Dataframe: Quickly download datasets from Kaggle for analysis.
