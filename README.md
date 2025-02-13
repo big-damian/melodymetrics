@@ -64,7 +64,7 @@ First, download the latest wheel (`.whl`) file and install it with:
   ```
 Additionally you can use this provided Python notebook in Google Colab. Just upload the wheel .whl file and run the code of the notebook file to see the main data analysis features:
 <br>
-![Python data analysis notebook](melodymetrics/resources/MelodyMetrics_DataAnalysis_example_usage_notebook.ipynb)
+![Python data analysis notebook](melodymetrics/resources/MelodyMetrics_DataAnalysis_example_usage_notebook.ipynb.rename)
 
 ## How to use the app
 Once the application is launched, you will see a main window with the following sections:
@@ -74,7 +74,7 @@ Once the application is launched, you will see a main window with the following 
   - Plot visualisation: Open the plot window and click the buttons to see the charts over the processed data
 
 ## UML Diagram
-![UML Diagram](./melodymetrics/resources/uml/uml.jpg)
+![UML Diagram](./melodymetrics/resources/uml/UML.jpg)
 
 ## Requirements
   - Python 3.10.11 or greater
